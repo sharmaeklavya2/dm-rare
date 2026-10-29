@@ -1,0 +1,35 @@
+\section{RARE vs Limiting RARE}
+\label{sec:lim-rare-equiv}
+
+Recall the definition of \limRARE{} from \cref{sec:lim-rare}.
+
+\thmRareEquivDefn*
+\begin{proof}
+Fix the allocation rule $A$.
+(We omit its superscript in this proof.)
+First, suppose that $\pvec$ is $\delta$-additive $\kappa$-RARE.
+For every seller $j \in [m]$ and deviation $q_j \ge 0$, there exists a response
+$\qvec_{-j} \in \IR_j(q_j, \pvec_{-j})$ such that
+\[ D_j(q_j, \pvec_{-j}) \le R_j(\qvec) \le \kappa R_j(\pvec) + \delta. \]
+Taking the supremum over $q_j \ge 0$ gives
+$V_j(\pvec_{-j}) \le \kappa R_j(\pvec) + \delta$ for every seller $j$.
+Thus, $\pvec$ is $\delta$-additive $\kappa$-\limRARE{}, proving the last claim.
+
+Now suppose that $\pvec$ is $\delta$-additive $\kappa$-\limRARE{}.
+Fix any $\eps > 0$, seller $j \in [m]$, and deviation $q_j \ge 0$.
+The set $\IR_j(q_j, \pvec_{-j})$ is nonempty since it contains $\pvec_{-j}$,
+and revenues are nonnegative, so its defining infimum $D_j(q_j, \pvec_{-j})$ is finite.
+By the definition of infimum, there exists a response
+$\qvec_{-j} \in \IR_j(q_j, \pvec_{-j})$ such that
+\[ R_j(\qvec) < D_j(q_j, \pvec_{-j}) + \eps
+    \le V_j(\pvec_{-j}) + \eps
+    \le \kappa R_j(\pvec) + \delta + \eps. \]
+Hence, $\pvec$ is $(\delta + \eps)$-additive $\kappa$-RARE.
+
+Conversely, suppose that $\pvec$ is $(\delta + \eps)$-additive $\kappa$-RARE
+for every $\eps > 0$.
+By the first part of the proof, for every seller $j \in [m]$ and every $\eps > 0$,
+\[ V_j(\pvec_{-j}) \le \kappa R_j(\pvec) + \delta + \eps. \]
+Letting $\eps$ tend to zero gives $V_j(\pvec_{-j}) \le \kappa R_j(\pvec) + \delta$,
+so $\pvec$ is $\delta$-additive $\kappa$-\limRARE{}.
+\end{proof}

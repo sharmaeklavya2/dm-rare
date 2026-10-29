@@ -1,0 +1,27 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\fontsize{9}{10.8}\selectfont,
+  card/.style={draw=black!35,rounded corners=2pt,fill=white,minimum width=7.15cm,minimum height=4.8cm},
+  offer/.style={draw=blue!55!black,fill=blue!6,rounded corners=2pt,text width=2.53cm,minimum height=.83cm,align=center},
+  move/.style={-{Stealth[length=2mm]},line width=.8pt,draw=black!65}]
+\path[use as bounding box] (-.2,-.25) rectangle (15,5.28);
+\node[card] at (3.58,2.53) {};\node[card] at (11.22,2.53) {};
+\node[font=\fontsize{9}{10.8}\selectfont\bfseries] at (3.58,4.54) {Wilson: withdraw existing offers};
+\node[font=\fontsize{9}{10.8}\selectfont\bfseries] at (11.22,4.54) {Riley: add a new offer};
+\node[offer] (we) at (1.84,3.1) {Entrant\\profitable pool};
+\node[offer,draw=orange!70!black,fill=orange!6] (wo) at (5.32,3.1) {Existing firm\\loses good types};
+\draw[move] (wo.west)--(we.east);
+\node at (3.58,3.85) {Good types move to entrant};
+\node[offer,draw=orange!70!black,fill=orange!6] (ww) at (5.32,1.55) {Old offer\\withdrawn};
+\draw[move] (wo.south)--(ww.north);
+\node[offer,draw=teal!65!black,fill=teal!5] (wl) at (1.84,1.55) {Entrant\\now loses};
+\draw[move] (ww.west)--(wl.east);
+\node at (3.58,2.32) {Bad types move to entrant};
+\node[align=center] at (3.58,.53) {Withdrawal sends the remaining\\bad customers to the entrant.};
+\node[offer] (re) at (9.48,3.1) {Entrant\\profitable pool};
+\node[offer,draw=teal!65!black,fill=teal!5] (rn) at (12.96,3.1) {New counteroffer\\profitable, protected};
+\draw[move] (re.east)--(rn.west);
+\node at (11.22,3.85) {Good types leave entrant};
+\node[offer,draw=orange!70!black,fill=orange!6] (rl) at (9.48,1.55) {Entrant\\only bad types};
+\draw[move] (re.south)--(rl.north);
+\node[align=center] at (12.96,1.55) {Further offers may\\reduce the responder's\\profit to zero.};
+\node[align=center] at (11.22,.53) {A new profitable offer removes\\the entrant's good customers.};
+\end{tikzpicture}

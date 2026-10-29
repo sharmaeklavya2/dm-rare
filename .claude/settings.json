@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lake -d lean build:*)",
+      "Bash(lake -d lean env lean:*)",
+      "Bash(lake -d /workspace/lean build:*)",
+      "Bash(lake -d /workspace/lean env lean:*)",
+      "Bash(rg:*)",
+      "Bash(grep:*)",
+      "Edit(/**/*.lean)",
+      "Write(/**/*.lean)",
+      "Read(~/.elan/toolchains/**)",
+      "Bash(python3 lean/scripts/lean-sig.py:*)",
+      "Bash(./lean/scripts/lean-sig.py:*)"
+    ]
+  },
+  "outputStyle": "Explanatory",
+  "showThinkingSummaries": true,
+  "verbose": true
+}

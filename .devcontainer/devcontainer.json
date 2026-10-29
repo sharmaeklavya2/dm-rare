@@ -1,0 +1,33 @@
+{
+  "name": "RARE",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": ""
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.git,target=/workspace/.git,type=bind,readonly",
+    "source=lean-elan,target=/root/.elan,type=volume",
+    "source=lean-mathlib-cache,target=/root/.cache/mathlib,type=volume",
+    "source=claude-auth,target=/root/.claude,type=volume",
+    "source=lake-${localWorkspaceFolderBasename},target=/workspace/lean/.lake,type=volume"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "leanprover.lean4",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "lean4.serverLogging.enabled": false
+      }
+    }
+  },
+  "onCreateCommand": "cd lean && lake exe cache get"
+}

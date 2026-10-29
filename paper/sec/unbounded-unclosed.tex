@@ -1,0 +1,123 @@
+\subsection{Unbounded Responses and Closedness}
+\label{sec:unbounded-unclosed}
+
+The proof of closedness in \cref{thm:rare-exists-continuous-2} uses the upper bounds on response prices
+to extract a convergent subsequence of responses.
+The following example shows that removing these bounds can make the outer KKM sets
+non-closed, even when the utility function is strictly concave.
+
+\begin{lemma}
+\label[lemma]{thm:unbounded-unclosed}
+There exists a market with one buyer of budget 1 and three goods,
+whose utility function is continuous, strictly monotone, and strictly concave,
+with the following property.
+Let $A$ be any allocation rule for this market, and for each seller $j \in [3]$, define
+\[ C_j^\infty \defeq \bigg\{\pvec \in \Delta_3:\; \forall q_j \in [p_j, \infty),\;
+    \exists \qvec_{-j} \in \prod_{k \ne j} [p_k, \infty) \text{ such that }
+    \frac{R_k^A(\qvec)}{R_{\all}(\qvec)} = p_k \;\forall k \in [3]\bigg\}. \]
+Then $C_1^\infty$ is not closed.
+This holds in both the rivalrous and non-rivalrous settings.
+\end{lemma}
+\begin{proof}
+With one buyer, the rivalrous and non-rivalrous demand sets coincide.
+Let the buyer's utility be
+\[ u(\xvec) \defeq 2x_1 + x_3 + 2\sqrt{x_2} + \sqrt{x_3} - \frac12(x_1 - x_3)^2. \]
+This function is continuous and satisfies $u(\vecZero) = 0$.
+Its partial derivatives, wherever the corresponding coordinate is positive, are
+\[ \frac{\partial u}{\partial x_1} = 2 - x_1 + x_3, \qquad
+    \frac{\partial u}{\partial x_2} = \frac{1}{\sqrt{x_2}}, \qquad
+    \frac{\partial u}{\partial x_3} = 1 + x_1 - x_3 + \frac{1}{2\sqrt{x_3}}. \]
+These are positive on their domains in $[0, 1]^3$, so $u$ is strictly monotone.
+All terms in $u$ are concave.
+If two bundles differ in coordinate 2 or 3, the corresponding square-root term
+gives a strict concavity inequality.
+If they differ only in coordinate 1, the quadratic term gives a strict inequality.
+Thus $u$ is strictly concave.
+By \cref{thm:unique-nr-demand}, the demand set is a singleton for every price vector,
+making the allocation rule $A$ unique.
+Thus, we suppress the superscript $A$ in the revenue functions from here onwards.
+
+For any $\pvec \in \Delta_3$ and $\qvec \ge \pvec$, we have
+$R_{\all}(\qvec) = 1$ by \cref{thm:rev-vs-F}.
+Hence, the revenue-proportion condition in $C_j^\infty$ is equivalent to
+$R_k(\qvec) = p_k$ for every $k$.
+We will show that
+\[ \pvec^{(\eps)} \defeq \left(\frac12, \frac12 - \eps, \eps\right) \in C_1^\infty
+    \quad \text{for every } 0 < \eps \le \frac1{64}, \]
+but $\pvec^{(0)} = (1/2, 1/2, 0) \notin C_1^\infty$.
+
+\paragraph{The limiting price vector is not in $C_1^\infty$.}
+Let seller 1 deviate to $q_1 = 1$.
+Suppose that there is a response with $q_2 \ge 1/2$ and $q_3 \ge 0$
+that gives revenues $(1/2, 1/2, 0)$.
+Let $\xvec$ be the buyer's optimal bundle at these prices.
+The revenue requirements imply
+\[ x_1 = \frac12, \qquad q_2x_2 = \frac12, \qquad q_3x_3 = 0. \]
+If $q_3 > 0$, then $x_3 = 0$.
+For sufficiently small $t > 0$, replacing $\xvec$ by
+$\xvec - q_3t\evec_1 + t\evec_3$ preserves its cost and stays in $[0, 1]^3$.
+The change in utility is $\sqrt{t} + O(t) > 0$ as $t$ tends to zero,
+contradicting optimality.
+Thus $q_3 = 0$, and strict monotonicity gives $x_3 = 1$.
+
+At this bundle, the marginal utilities per unit of money satisfy
+\[ \frac{1}{q_1}\frac{\partial u}{\partial x_1}(\xvec) = \frac52 > 2
+    \ge 2\sqrt{x_2} = \frac{1}{q_2}\frac{\partial u}{\partial x_2}(\xvec), \]
+where the last equality uses $q_2x_2 = 1/2$.
+Since $x_1 < 1$ and $x_2 > 0$, shifting a sufficiently small amount of spending
+from good 2 to good 1 strictly increases utility, again contradicting optimality.
+Therefore $\pvec^{(0)} \notin C_1^\infty$.
+
+\paragraph{Every $\pvec^{(\eps)}$ is in $C_1^\infty$.}
+Fix $0 < \eps \le 1/64$ and any deviation $q_1 = s \ge 1/2$.
+If $s = 1/2$, keeping the other prices unchanged restores all revenues.
+Suppose $s > 1/2$, and let $a \defeq 1/(2s) \in (0, 1)$.
+We construct an optimal bundle $(a, y, z)$ whose expenditures are $(1/2, 1/2 - \eps, \eps)$.
+
+For $z \in [0, \eps]$, define
+\[ h(z) \defeq a(2 - a + z). \]
+We first choose $z \in (0, \eps)$ satisfying
+\begin{equation}
+\label{eq:unbounded-unclosed-z}
+z(1 + a - z) + \frac12\sqrt{z} = 2\eps h(z).
+\end{equation}
+At $z = 0$, the left side is zero and the right side is positive.
+At $z = \eps$, we have $h(\eps) \le 1 + \eps$ and
+\[ \eps(1 + a - \eps) + \frac12\sqrt{\eps} \ge \frac12\sqrt{\eps}
+    \ge 4\eps > 2\eps(1 + \eps) \ge 2\eps h(\eps). \]
+Thus such a $z$ exists by the intermediate value theorem.
+
+Set
+\[ y \defeq \bigl((1 - 2\eps)h(z)\bigr)^2, \qquad
+    \qvec \defeq \left(s, \frac{1/2 - \eps}{y}, \frac{\eps}{z}\right). \]
+Since $0 < z < \eps$ and $0 < a < 1$, we have
+\[ 0 < (1 - 2\eps)h(z) < (1 - 2\eps)(1 + \eps) = 1 - \eps - 2\eps^2 < 1. \]
+Hence $0 < y < 1$, so $\qvec \ge \pvec^{(\eps)}$.
+The bundle $\xvec \defeq (a, y, z)$ lies in $(0, 1)^3$ and exhausts the budget:
+\[ (q_1a, q_2y, q_3z) = \left(\frac12, \frac12 - \eps, \eps\right). \]
+Moreover, the definitions and \cref{eq:unbounded-unclosed-z} give
+\begin{align*}
+\frac{1}{q_1}\frac{\partial u}{\partial x_1}(\xvec) &= 2a(2 - a + z) = 2h(z),
+\\ \frac{1}{q_2}\frac{\partial u}{\partial x_2}(\xvec) &= \frac{\sqrt{y}}{1/2 - \eps} = 2h(z),
+\\ \frac{1}{q_3}\frac{\partial u}{\partial x_3}(\xvec) &= \frac{z(1 + a - z) + \sqrt{z}/2}{\eps} = 2h(z).
+\end{align*}
+Thus $\nabla u(\xvec) = 2h(z)\qvec$.
+For any affordable bundle $\wvec \in [0, 1]^3$, concavity gives
+\[ u(\wvec) \le u(\xvec) + \nabla u(\xvec)^T(\wvec - \xvec)
+    = u(\xvec) + 2h(z)\qvec^T(\wvec - \xvec) \le u(\xvec). \]
+Consequently, $\xvec$ is optimal.
+By strict concavity, it is the unique optimal bundle and must be selected by $A$.
+Thus $R_k(\qvec) = p_k^{(\eps)}$ for every seller $k$.
+This proves $\pvec^{(\eps)} \in C_1^\infty$.
+Since $\pvec^{(\eps)} \to \pvec^{(0)}$ as $\eps \to 0$,
+the set $C_1^\infty$ is not closed.
+\end{proof}
+
+The constructed responses illustrate why the limiting argument fails.
+For any fixed deviation $s > 1/2$, \cref{eq:unbounded-unclosed-z} implies
+\[ \frac12\sqrt{z} \le 2\eps h(z) \le 2\eps(1 + \eps), \qquad
+    q_3 = \frac{\eps}{z} \ge \frac{1}{16\eps(1 + \eps)^2}. \]
+Thus seller 3's response price tends to infinity while her revenue tends to zero.
+At $\pvec^{(0)}$, however, restoring her zero revenue forces her price to be zero.
+The buyer then receives all of good 3, changing her relative preference
+for goods 1 and 2 and preventing revenue restoration at the deviation $q_1 = 1$.

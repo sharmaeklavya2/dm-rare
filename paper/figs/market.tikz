@@ -1,0 +1,18 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\fontsize{9}{10.8}\selectfont,
+  seller/.style={draw=blue!55!black,fill=blue!6,rounded corners=2pt,minimum width=2.7cm,minimum height=.76cm,align=center},
+  buyer/.style={draw=black!55,fill=black!3,rounded corners=2pt,minimum width=3.7cm,minimum height=.8cm,align=center},
+  flow/.style={-{Stealth[length=2mm]},draw=black!45,line width=.6pt}]
+\path[use as bounding box] (-.2,-2.4) rectangle (15,3.15);
+\node[seller] (s1) at (2.2,2.35) {Seller 1: price $p_1$};
+\node[seller] (s2) at (7.4,2.35) {Seller 2: price $p_2$};
+\node[seller] (s3) at (12.6,2.35) {Seller 3: price $p_3$};
+\node[buyer] (b1) at (4.8,.15) {Buyer 1: $u_1(\xvec_1)$, budget $b_1$};
+\node[buyer] (b2) at (10,.15) {Buyer 2: $u_2(\xvec_2)$, budget $b_2$};
+\foreach \s in {s1,s2,s3} {\foreach \b in {b1,b2} {\draw[flow] (\s.south)--(\b.north);}}
+\node[fill=white,inner sep=3pt] at (7.4,1.13) {Demand determined by preferences and constraints};
+\node[draw=black!35,fill=white,rounded corners=2pt,text width=6.5cm,align=center,minimum height=1.02cm] at (3.55,-1.47)
+ {\textbf{Rival goods}\quad $\sum_i x_{i,j} \le S_j$\\Buyers share the available supply.};
+\node[draw=teal!65!black,fill=teal!5,rounded corners=2pt,text width=6.5cm,align=center,minimum height=1.02cm] at (11.2,-1.47)
+ {\textbf{Non-rival goods}\quad $0 \le x_{i,j} \le 1$\\Each buyer can receive its own copy.};
+\node at (7.4,-2.24) {Seller revenue: $R_j(\pvec) = p_j\sum_i x_{i,j}(\pvec)$};
+\end{tikzpicture}

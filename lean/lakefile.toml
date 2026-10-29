@@ -1,0 +1,29 @@
+name = "RareForMarkets"
+defaultTargets = ["RareForMarkets"]
+
+[leanOptions]
+pp.unicode.fun = true  # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+weak.linter.style.header = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.30.0"
+
+[[lean_lib]]
+name = "AxiomCheck"
+[[lean_lib]]
+name = "Scratch"
+[[lean_lib]]
+name = "AiScratch"
+
+[[lean_lib]]
+name = "RareForMarkets"
+
+[[lean_lib]]
+name = "FixedPoint"
+# Code copied from EconCSLib; keep it close to upstream instead of fixing style warnings.
+leanOptions = { weak.linter.mathlibStandardSet = false }

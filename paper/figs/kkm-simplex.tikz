@@ -1,0 +1,23 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\fontsize{9}{10.8}\selectfont]
+\path[use as bounding box] (-.2,-.35) rectangle (15,5.45);
+\coordinate (v1) at (1.0,.7);\coordinate (v2) at (7.0,.7);\coordinate (v3) at (4.0,4.9);
+\coordinate (ps) at (4.0,2.10);
+\fill[blue!16] (v1)--(4,.7)--(ps)--(2.5,2.8)--cycle;
+\fill[orange!20] (v2)--(5.5,2.8)--(ps)--(4,.7)--cycle;
+\fill[teal!17] (v3)--(2.5,2.8)--(ps)--(5.5,2.8)--cycle;
+\draw[black!65,line width=.8pt] (v1)--(v2)--(v3)--cycle;
+\draw[black!45,dashed] (4,.7)--(ps)--(2.5,2.8);
+\draw[black!45,dashed] (ps)--(5.5,2.8);
+\node at (2.65,1.4) {$C_1$};\node at (5.35,1.4) {$C_2$};\node at (4,3.44) {$C_3$};
+\fill[black] (ps) circle (2.8pt);
+\node[anchor=north west,fill=white,inner sep=2pt] at (4.11,2.03) {$\pvec^*$};
+\node[anchor=north east] at (.95,.61) {$(1,0,0)$};
+\node[anchor=north west] at (7.05,.61) {$(0,1,0)$};
+\node[anchor=south] at (4,4.97) {$(0,0,1)$};
+\node[anchor=west,text width=6.4cm,align=left] at (8.55,4.15)
+ {$\displaystyle\Delta_3 = \{\pvec \in \mathbb{R}_{\ge 0}^3: \textstyle\sum_{j=1}^3 p_j = 1\}$\\[3pt]Every buyer can afford all the goods.};
+\node[anchor=west,text width=6.4cm,align=left] at (8.55,2.56)
+ {$C_j$: every deviation by seller $j$ to a higher price can be met by a response that restores every seller's revenue.};
+\node[anchor=west,text width=6.4cm,align=left] at (8.55,.99)
+ {Inner KKM proves the covering condition.\\Outer KKM gives $\pvec^* \in C_1 \cap C_2 \cap C_3$.};
+\end{tikzpicture}

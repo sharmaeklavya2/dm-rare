@@ -1,0 +1,206 @@
+\section{Dynamics}
+\label{sec:dynamics}
+
+In this section, we look at a simple dynamic that leads to approximate RARE prices.
+
+\subsection{Limiting RARE}
+\label{sec:lim-rare}
+
+We begin by giving an alternative formulation of RARE,
+which would be more useful for analyzing dynamics.
+To do so, we define each seller $j$'s \emph{optimal deviation revenue} $V_j(\pvec_{-j})$.
+
+\begin{definition}[Optimal deviation revenue]
+\label{defn:vj}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market,
+$A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be an allocation rule,
+and $\pvec \in \mathbb{R}_{\ge 0}^m$ be a price vector.
+When seller $j$ deviates to price $q_j \ge 0$,
+define the other sellers' set of individually rational (IR) responses as
+\[ \IR^A_j(q_j, \pvec_{-j}) \defeq \{\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m] \setminus \{j\}}:
+    R^A_k(\qvec) \ge R^A_k((q_j, \pvec_{-j}))\; \forall k \in [m] \setminus \{j\}\}. \]
+Note that this set is non-empty, since $\pvec_{-j} \in \IR^A_j(q_j, \pvec_{-j})$.
+%
+Define the deviator $j$'s \emph{worst-case revenue} at deviation $q_j$ as
+\[ D^A_j(q_j, \pvec_{-j}) \defeq \inf_{\qvec_{-j} \in \IR^A_j(q_j, \pvec_{-j})} R^A_j(\qvec), \]
+and her optimal deviation revenue as
+\[ V^A_j(\pvec_{-j}) \defeq \sup_{q_j \in \mathbb{R}_{\ge 0}} D^A_j(q_j, \pvec_{-j}). \]
+When $A$ is clear from context, we simply write $\IR_j$, $D_j$, and $V_j$
+instead of $\IR^A_j$, $D^A_j$, and $V^A_j$.
+\end{definition}
+
+Intuitively, it might seem that a price vector $\pvec$ is RARE iff
+$R_j(\pvec) \ge V_j(\pvec_{-j})$ for every seller $j \in [m]$,
+giving us an alternative formulation of RARE.
+But this formulation is \emph{not} definitionally equivalent to RARE, for a subtle reason.
+In particular, for every deviation $q_j$ by seller $j$,
+RARE requires an IR response $\qvec_{-j}$
+such that the new revenue $R_j(\qvec)$ is at most $R_j(\pvec)$.
+Our new definition, instead, requires a \emph{sequence of} IR responses for which $j$'s new revenue
+converges to at most $R_j(\pvec)$.
+We call this new definition \emph{limiting-RARE}.
+
+\begin{definition}[limiting-RARE]
+\label{defn:lim-RARE}
+Consider a market $\Ical$ and allocation rule $A$.
+Then for any $\delta \ge 0$ and $\kappa \ge 1$, the price vector $\pvec$
+is called $\delta$-additive $\kappa$-\limRARE{} if for every seller $j \in [m]$, we have
+\[ R^A_j(\pvec) \ge \frac{V^A_j(\pvec_{-j}) - \delta}{\kappa}. \]
+\end{definition}
+
+The following result shows that RARE and \limRARE{} are the same up to
+an infinitesimally small additive constant.
+We defer the proof to \cref{sec:lim-rare-equiv}.
+
+\begin{restatable}{lemma}{thmRareEquivDefn}
+\label{thm:rare-equiv-defn}
+For any $\delta \ge 0$ and $\kappa \ge 1$,
+a price vector $\pvec$ is $\delta$-additive $\kappa$-\limRARE{} iff
+for every $\eps > 0$, it is $(\delta + \eps)$-additive $\kappa$-RARE.
+Moreover, a $\delta$-additive $\kappa$-RARE price vector is also
+$\delta$-additive $\kappa$-\limRARE.
+\end{restatable}
+
+\subsection{The Dynamic}
+\label{sec:dynamics:defn}
+
+Fix a continuous allocation rule $A$. The sellers initially have prices $\pvec^{(0)} = \vecZero$.
+At each time step $t \in \N$, a seller $j$ is called \emph{unsatisfied} if
+$V^A_j(\pvec^{(t-1)}_{-j}) > \kappa\nu p^{(t-1)}_j$.
+Denote the set of all unsatisfied sellers by $J^{(t)}$.
+If $J^{(t)} = \emptyset$, i.e., there are no unsatisfied sellers,
+then let $\pvec^{(t)} \defeq \pvec^{(t-1)}$.
+Otherwise, pick an arbitrary non-empty subset $S^{(t)} \subseteq J^{(t)}$, and update the prices as
+\[ p^{(t)}_j \defeq \begin{cases}
+\displaystyle \frac{V^A_j(\pvec^{(t-1)}_{-j})}{\kappa\nu} & \text{ if } j \in S^{(t)}
+\\[0.8em] p^{(t-1)}_j & \text{ if } j \notin S^{(t)}
+\end{cases}. \]
+
+We will soon prove that $R_j(\pvec^{(t)}) = \nu p^{(t)}_j$ for all $t$ and $j$, which means that when $\kappa = 1$,
+each seller either retains her old price, or increases her price to get her optimal deviation revenue,
+making this a very natural dynamic.
+
+Note that if $J^{(t)} = \emptyset$, then the prices freeze permanently.
+Otherwise, prices of goods $S^{(t)}$ strictly increased, and the other goods had the same price as the previous round.
+By picking $S^{(t)}$ appropriately, we can model different types of dynamics:
+if $S^{(t)} = J^{(t)}$ for all $t$, then sellers update prices synchronously,
+and if $|S^{(t)}| = 1$ for all $t$, then sellers update prices one-at-a-time.
+
+\subsection{Analyzing the Dynamic}
+
+The $\kappa$-RARE price vector whose existence we established in
+\cref{thm:rare-exists-continuous} plays a key role in the analysis.
+We begin by proving a useful property of that price vector:
+it helps us upper bound the optimal deviation revenue of the price vectors it dominates.
+
+\begin{lemma}
+\label{thm:vbound-pstar}
+There exists $\pvec^* \in \beta\Delta_m^{\circ}$ such that for every $\pvec \in \prod_{k=1}^m [0, p^*_k]$,
+and seller $j \in [m]$, we have $V^A_j(\pvec_{-j}) \le \kappa\nu p^*_j$.
+\end{lemma}
+\begin{proof}
+Let $\pvec^*$ be the $\kappa$-RARE price vector from \cref{thm:rare-exists-continuous}.
+Pick any seller $j$ and deviation $q_j \ge 0$.
+By \cref{thm:rare-exists-continuous}, there exists a response $\qvec_{-j}$ such that
+\begin{tightenum}
+\item $R_j(\qvec) \le \kappa R_j(\pvec^*) = \kappa\nu p^*_j$.
+\item For each responder $k \in [m] \setminus \{j\}$, we have $R_k(\qvec) \ge \nu p_k^*$.
+\end{tightenum}
+
+For any responder $k \in [m] \setminus \{j\}$, we have
+$R_k((q_j, \pvec_{-j})) \le \nu p_k \le \nu p_k^* \le R_k(\qvec)$.
+Thus, $\qvec_{-j} \in \IR_j(q_j, \pvec_{-j})$, and so,
+$D_j(q_j, \pvec_{-j}) \le R_j(\qvec) \le \kappa \nu p^*_j$.
+Hence, $V_j(\pvec_{-j}) \le \kappa \nu p^*_j$.
+\end{proof}
+
+We now show that in each iteration of the dynamic, the prices are upper bounded by $\pvec^*$.
+
+\begin{lemma}
+Let $(\pvec^{(t)})_{t \in \N \cup \{0\}}$ be the dynamic defined in \cref{sec:dynamics:defn}.
+Let $\pvec^*$ be as defined in \cref{thm:vbound-pstar}.
+Then for all $t \in \N \cup \{0\}$ and $j \in [m]$, we have
+$p^{(t)}_j \le p^{(t+1)}_j \le p^*_j$ and $R_j(\pvec^{(t)}) = \nu p^{(t)}_j$.
+\end{lemma}
+\begin{proof}
+The monotonicity of $\pvec^{(t)}$ in $t$ follows easily from its definition,
+i.e., $p^{(t)}_j \le p^{(t+1)}_j$ for all $j \in [m]$.
+
+For all $t \in \N$ and $j \in [m]$, using \cref{thm:vbound-pstar}, we get
+\[ p^{(t)}_j \le \max\bigg(p^{(t-1)}_j, \frac{V_j(\pvec^{(t-1)}_{-j})}{\kappa\nu}\bigg)
+    \le \max(p^{(t-1)}_j, p^*_j). \]
+Then we can prove $p^{(t)}_j \le p^*_j$ for all $j \in [m]$ and $t \in \N \cup \{0\}$ by induction on $t$,
+since $\pvec^{(0)} = \vecZero$.
+
+Moreover,
+\[ \sum_{j=1}^m p^{(t)}_j \le \sum_{j=1}^m p^*_j = \beta, \]
+so $R_j(\pvec^{(t)}) = \nu p^{(t)}_j$ for all $j$ by \cref{thm:accounting}.
+\end{proof}
+
+Observe that if the dynamic reaches equilibrium (i.e., the prices stop changing),
+then the prices are $\kappa$-\limRARE{}.
+
+\begin{observation}
+Let $\pvec^{(0)} = \vecZero$, and for $t \in \N$, let $p^{(t)}$, $J^{(t)}$, and $S^{(t)}$
+be as defined in \cref{sec:dynamics:defn}.
+Suppose the prices do not change in some iteration $T+1$, i.e., $\pvec^{(T+1)} = \pvec^{(T)}$.
+Then $R_j(\pvec^{(T)}) = \nu p^{(T)}_j \ge V_j(\pvec^{(T)}_{-j})/\kappa$ for all $j \in [m]$,
+i.e., $\pvec^{(T)}$ is $\kappa$-\limRARE{}.
+\end{observation}
+
+Note that the prices $\pvec^{(T)}$ above need not be the same as $\pvec^*$.
+There may be multiple $\kappa$-\limRARE{} price vectors.
+
+Even if the dynamic does not reach equilibrium, we show that after sufficiently many rounds,
+we get $\kappa$-RARE with a small additive approximation
+if $S^{(t)}$ always includes the \emph{most unsatisfied} seller.
+
+\begin{theorem}
+\label{thm:dynamics-convergence}
+Let $\pvec^{(0)} = \vecZero$, and for $t \in \N$, let $p^{(t)}$, $J^{(t)}$, and $S^{(t)}$
+be as defined in \cref{sec:dynamics:defn}.
+In every iteration $t \in \N$ where $J^{(t)} \neq \emptyset$, suppose $S^{(t)}$ always includes
+some seller $j$ maximizing $V_j(\pvec^{(t-1)}_{-j})/(\kappa\nu) - p^{(t-1)}_j$.
+Then for any $\delta > 0$:
+\begin{enumerate}
+\item (an approximate RARE occurs soon) $\exists t \le \floor{B/\delta}$ such that
+    $\pvec^{(t)}$ is a $\delta$-additive $\kappa$-RARE.
+\item (eventually prices remain approximately RARE) $\exists T \in \N \cup \{0\}$ such that
+    for all $t > T$, $\pvec^{(t)}$ is a $\delta$-additive $\kappa$-RARE.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+For any $t \in \N \cup \{0\}$, let
+\[ g_t \defeq \max_{j \in [m]} \max(0, V_j(\pvec^{(t)}_{-j}) - \kappa R_j(\pvec^{(t)})). \]
+Then $\pvec^{(t)}$ is $g_t$-additive $\kappa$-\limRARE.
+%
+Since $R_j(\pvec^{(t)}) = \nu p^{(t)}_j$ for all $t$ and $j$,
+we get $g_t = 0$ if $J^{(t+1)} = \emptyset$. Otherwise,
+\begin{align*}
+\kappa\nu \max_{j \in [m]} (p^{(t+1)}_j - p^{(t)}_j)
+   &= \kappa\nu \max_{j \in S^{(t+1)}} (p^{(t+1)}_j - p^{(t)}_j)
+    = \max_{j \in S^{(t+1)}} V_j(\pvec^{(t)}_{-j}) - \kappa R_j(\pvec^{(t)})
+\\ &= \max_{j \in [m]} \max(0, V_j(\pvec^{(t)}_{-j}) - \kappa R_j(\pvec^{(t)}))
+    = g_t.
+\end{align*}
+(Here the last equality follows from $S^{(t+1)}$ containing the most unsatisfied seller.)
+
+Now for any $T \in \N \cup \{0\}$, sum this equality over all $t \in [T] \cup \{0\}$ to get
+\[ \sum_{t=0}^T g_t = \kappa\nu \sum_{t=0}^T \max_{j \in [m]} (p^{(t+1)}_j - p^{(t)}_j)
+    \le \kappa\nu \sum_{j=1}^m \sum_{t=0}^T (p^{(t+1)}_j - p^{(t)}_j)
+    = \kappa\nu \sum_{j=1}^m p^{(T+1)}_j \le \kappa\nu\beta = B. \]
+Pick any $\delta > 0$.
+\begin{enumerate}
+\item Let $T \defeq \floor{B/\delta}$. Then for some $t \in [T] \cup \{0\}$, we have
+    $g_t \le B/(T+1) < \delta$, which implies that $\pvec^{(t)}$ is a $\delta$-additive $\kappa$-RARE.
+    (Note that we get an approximate RARE, not just an approximate \limRARE{},
+    since $g_t$ is \emph{strictly} less than $\delta$.)
+\item There are at most $\floor{B/\delta}$ values of $t$ for which $g_t \ge \delta$.
+    Let $T$ be the largest such that $g_T \ge \delta$ (and let $T$ be 0 if $g_t < \delta$ for all $t$).
+    Then for all $t > T$, we have $g_t < \delta$, i.e., $\pvec^{(t)}$ is a $\delta$-additive $\kappa$-RARE.
+    \qedhere
+\end{enumerate}
+\end{proof}
+
+Intuitively, if we don't require $S^{(t)}$ to always include the most unsatisfied seller,
+one seller might get stuck at a particularly bad price while the other sellers keep improving.

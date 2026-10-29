@@ -1,0 +1,114 @@
+\section{Properties of the Revenue Function}
+\label{sec:revenue-props}
+
+In our market setting, the sellers are in a pricing game,
+where each seller's payoff is given by her revenue function $R_j$.
+Analyzing this pricing game, therefore, requires understanding the revenue function, which is the topic of this section.
+
+\subsection{A Closed Form for the Total Revenue}
+\label{sec:tot-rev-closed-form}
+
+Analyzing equilibria is often simpler for \emph{fixed-sum games},
+i.e., where the sum of the players' payoffs does not depend on the players' actions.
+For example, for two players, mixed (non-pure) Nash equilibria in \emph{fixed-sum games}
+can be efficiently computed using linear programming \cite{dantzig1951proof}.
+
+For our market model, the pricing game among the sellers is similar in spirit to a fixed-sum game,
+since the sellers compete for the same buyers' budgets.
+Indeed, if prices are high enough to exhaust all buyers' budgets,
+the sellers' revenues would sum to $B$, the total buyer budget.
+For lower prices, however, buyers may not exhaust their budgets,
+making the game non-fixed-sum. We study the total revenue
+$R_{\all}(\pvec, \xvec) \defeq \sum_{j=1}^m R_j(\pvec, \xvec)$
+and give a closed-form expression for it,
+which precisely quantifies this difference between the low-price and high-price regimes.
+
+\begin{observation}
+\label[observation]{thm:rev-vs-F}
+For any prices $\pvec \in \mathbb{R}_{\ge 0}^m$,
+\begin{tightenum}
+\item (Non-rivalrous goods) If $\xvec \in \DemNR(\pvec)$,
+    we have $R_{\all}(\pvec, \xvec) = F(\sum_{j=1}^m p_j)$,
+    where $F(y) \defeq \sum_{i=1}^n \min(b_i, y) \le \min(B, ny)$.
+\item (Rivalrous goods) If $\xvec \in \DemR(\pvec)$,
+    we have $R_{\all}(\pvec, \xvec) = \min(B, \sum_{j=1}^m p_j)$.
+\end{tightenum}
+In either case, we get $R_{\all}(\pvec, \xvec) \le B$.
+\end{observation}
+\begin{proof}
+In the non-rivalrous setting, each buyer $i \in [n]$ either exhausts her budget
+or purchases every good completely, contributing $\min(b_i, \sum_{j=1}^m p_j)$
+to the total revenue. Thus, $R_{\all}(\pvec, \xvec) = F(\sum_{j=1}^m p_j)$.
+
+In the rivalrous setting, the buyers collectively either exhaust their budgets
+or purchase every good completely
+(since utilities are strictly monotone and $\xvec$ is Pareto optimal).
+Hence, $R_{\all}(\pvec) = \min(B, \sum_{j=1}^m p_j)$.
+\end{proof}
+
+Since $R_{\all}(\pvec, \xvec)$ does not depend on $\xvec$ when $\xvec$ lies in the demand set,
+we simply write $R_{\all}(\pvec)$ instead when it is clear from context
+whether the goods are rivalrous or not.
+We also conclude that $R_{\all}$ is monotonic in prices.
+
+\begin{observation}
+\label{thm:rall-mono}
+Let $\pvec, \qvec \in \mathbb{R}_{\ge 0}^m$ be price vectors
+such that $\sum_{j=1}^m p_j \le \sum_{j=1}^m q_j$.
+Then $R_{\all}(\pvec) \le R_{\all}(\qvec)$
+(for both the rivalrous and non-rivalrous settings).
+\end{observation}
+
+\subsection{Unifying the Rivalrous and Non-Rivalrous Settings}
+\label{sec:unify}
+
+We now slightly refine the analysis of \cref{sec:tot-rev-closed-form}.
+
+When prices are low enough that each good is fully sold,
+each seller $j$'s revenue is $p_j$ in the rivalrous setting
+and $n \cdot p_j$ in the non-rivalrous setting.
+
+Now consider the regime where prices are large.
+In the rivalrous setting, when the prices sum to at least $B$,
+we get $R_{\all}(\pvec) = \min(B, \sum_{j=1}^m p_j) = B$.
+In the non-rivalrous setting, when prices sum to at least $b_{\min}$,
+then every buyer contributes at least $b_{\min}$ to the total revenue,
+giving us $R_{\all}(\pvec) \ge n \cdot b_{\min}$.
+
+The above properties capture almost everything about the revenue functions that we need
+in our existence results (\cref{sec:exist}) and the dynamics (\cref{sec:dynamics}).
+Note how both the rivalrous and non-rivalrous settings behave similarly,
+with the differences showing up only in some constants
+(the factor next to $p_j$: $1$ vs $n$, and the price sum threshold: $B$ vs $b_{\min}$).
+Indeed, our analyses for the existence results and the dynamics
+are the same for both settings up to these constants.
+
+To save ourselves the trouble of writing these results separately for each setting,
+we introduce parameters $\nu$, $\beta$, and $\kappa$, and use them hereafter
+to perform a unified analysis of both settings.
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+\text{Market} & $\nu$ & $\beta$ & $\kappa \defeq B/(\nu\beta)$
+\\ \hline Rivalrous & 1 & $B$ & 1
+\\ Non-rivalrous & $n$ & $b_{\min}$ & $b_{\avg}/b_{\min}$
+\end{tabular}
+\end{center}
+
+We now restate the above properties of the revenue functions using these parameters.
+We write $\Dem(\pvec)$ instead of $\DemR(\pvec)$ or $\DemNR(\pvec)$ to refer to the demand set
+in general without specifying whether the goods are rivalrous or non-rivalrous.
+
+\begin{observation}[Properties of the revenue function]
+\label{thm:accounting}
+In both the rivalrous and non-rivalrous settings,
+for any prices $\pvec$ and any $\xvec \in \Dem(\pvec)$, we have
+\begin{enumerate}
+\item \label{item:rev-props:ub}For each seller $j \in [m]$,
+    we have $R_j(\pvec, \xvec) \le \nu p_j$, i.e., her revenue is
+    at most what she would earn by selling her good fully.
+\item \label{item:rev-props:low-prices}If $\sum_{j=1}^m p_j \le \beta$, then every good
+    is fully sold, so each seller $j$'s revenue $R_j(\pvec, \xvec)$ is $\nu p_j$.
+\item \label{item:rev-props:high-prices}$\sum_{j=1}^m p_j \ge \beta \implies R_{\all}(\pvec) \ge \nu \beta$.
+\end{enumerate}
+\end{observation}

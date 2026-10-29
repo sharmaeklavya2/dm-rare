@@ -1,0 +1,335 @@
+\section{Introduction}
+\label{sec:intro}
+
+Understanding which prices emerge when sellers act strategically is a fundamental question in economics and computation~\cite{Tirole1988,Nisan2007,Babaioff2014}. We study a broad class of pricing games with budget-constrained buyers, considering both rivalrous and non-rivalrous settings. Demand is generated endogenously by buyers’ preferences and their choices of affordable bundles. Pure Nash prices need not exist in these markets, a difficulty also encountered in classical pricing models~\cite{dAspremontGabszewiczThisse1979,Edgeworth1897} and recent adaptations to data pricing~\cite{chaudhury2026equilibrium}. On closer inspection, some of this instability stems from myopic price deviations: a seller’s price change appears profitable when competitors’ prices are held fixed, yet its gains can disappear once competitors respond in their own interests.
+
+The deployment of AI agents gives both our market model and our stability question renewed relevance. On the demand side, agents may be tasked with selecting the most useful bundle within a user-authorized budget, making budget-constrained utility maximization a natural model of delegated purchasing~\cite{LiuEtAl2026BudgetConstrainedAgents}. On the supply side, sellers can delegate pricing to agents equipped to reason about competitors’ reactions. Systems combining language models with strategic reasoning already model other agents’ likely actions~\cite{FAIR2022}, and experiments with language-model pricing agents show that their instructions can substantially affect market outcomes~\cite{FishGonczarowskiShorrer2024}.
+\emph{How these reasoning procedures affect market stability therefore becomes a concrete question of agent design.}
+
+In this paper, we investigate whether accounting for competitors’ rational responses can restore price stability in budget-constrained pricing games. In particular, we seek systematic and natural ways to expand the responses considered beyond competitors’ unchanged prices in Nash’s deviation test, allowing rational counterresponses to deter myopic deviations. Our approach differs from lookahead equilibria~\cite{MirrokniThainVetta2012,BiloFanelliMoscardelli2017} and opponent-aware learning methods such as LOLA~\cite{FoersterEtAl2018LOLA}: we characterize admissible competitor responses without predicting or simulating a particular continuation of play. Predicting such a continuation requires additional assumptions about competitors’ behavior; an equilibrium-based prediction must also address selection when several equilibria exist, and may be unavailable when no pure equilibrium exists. The remainder of this section introduces our market model and equilibrium notion, and gives an overview of its structural and computational properties.
+
+
+\paragraph{Pricing games with budget-constrained buyers.}
+There are $n$ buyers and $m$ sellers, and each seller sells a single \emph{divisible} good.
+Each buyer $i$ has a budget $b_i > 0$ and a utility function $u_i$ over bundles of goods.
+Each seller $j$ sets a price $p_j \ge 0$ for her good.
+Given these prices, each buyer purchases a bundle that maximizes her utility
+subject to her budget constraint, i.e., the total price of her bundle must be at most $b_i$.
+Seller $j$'s revenue is $p_j$ times the amount of good $j$ purchased by the buyers,
+and each seller wants to maximize her revenue.
+This puts the sellers in a \emph{pricing game} with each other,
+whose stable prices are the subject of this paper.
+
+A buyer's budget is the maximum amount of money that she can spend on these goods. It need not be her entire wealth, and it can be smaller than her value for the goods. E.g., a research group that buys datasets using a grant,
+or a firm that buys software licenses using a fixed annual allocation, may value more goods than it can afford.
+Buyers behave the same way in Fisher markets~\cite{EisenbergGale1959,Devanur2008}. However, prices in a Fisher market are set to clear the market, whereas prices in our model are set by strategic sellers.
+
+Budgets couple the sellers' revenues:
+money that a buyer spends on one good is no longer available for other goods.
+Hence, a seller's revenue depends on the prices of all goods, even when buyers have linear utilities.
+This distinguishes our model from many standard formulations of Bertrand competition,
+which analyze price competition through a specified aggregate demand function,
+and from Bertrand--Edgeworth models, which additionally incorporate capacity constraints
+and rationing~\cite{Bertrand1883,Edgeworth1897,KrepsScheinkman1983}.
+In our model, demand arises from the choices of individual buyers,
+each with her own budget and her own preferences over bundles of goods.
+
+\paragraph{Rivalrous and non-rivalrous goods.}
+We study two kinds of goods.
+A \emph{rivalrous} good has a fixed supply that buyers share:
+each seller has one unit of her good,
+and the fraction of the good allocated to one buyer cannot be allocated to another.
+A \emph{non-rivalrous} good can be supplied to any number of buyers:
+each buyer can receive up to one unit of each good, irrespective of what other buyers receive.
+Datasets are a prominent example of non-rivalrous goods,
+since giving a copy of a dataset to one buyer does not prevent the seller
+from giving a copy to another buyer.
+This has motivated recent work on data markets~\cite{JonesTonetti2020,chaudhury2026equilibrium}.
+
+For non-rivalrous goods, each buyer chooses her bundle independently of other buyers.
+Formally, she picks a bundle $\zvec \in [0, 1]^m$
+maximizing $u_i(\zvec)$ subject to $\pvec^T\zvec \le b_i$.
+For rivalrous goods, prices need not clear the market,
+so several buyers may want the same good, and its supply must be rationed among them.
+We only assume that the rationing is \emph{Pareto optimal} for the buyers:
+among all allocations that respect the goods' supply and the buyers' budgets,
+no other allocation makes some buyer better off without making another buyer worse off.
+In both the rivalrous and non-rivalrous settings,
+there can be multiple optimal allocations at the same prices,
+and they can give the sellers different revenues.
+Hence, we also fix an \emph{allocation rule},
+which picks one optimal allocation for each price vector $\pvec = (p_1, \ldots, p_m)$.
+Let $R_j(\pvec)$ be seller $j$'s revenue at prices $\pvec$ under this allocation rule.
+See \cref{sec:prelims} for the formal model.
+
+\paragraph{Nash equilibria often fail to exist.}
+The quintessential notion of stability in a game is pure Nash equilibrium.
+In our setting, a price vector $\pvec$ is a pure Nash equilibrium if no seller
+can increase her revenue by changing her price while the other sellers keep their prices fixed.
+(We only study deterministic prices in this paper, so we drop the word `pure' from now on.)
+The following instance exhibits this failure with just two sellers and linear buyer utilities.
+
+\begin{example}
+\label{ex:intro-no-nash}
+Consider two non-rivalrous goods and two buyers $A$ and $B$, each with budget 1.
+Their utilities are $u_A(\xvec) = \frac{3}{2}x_1 + x_2$ and $u_B(\xvec) = x_1 + \frac{3}{2}x_2$.
+At prices $(1/2, 1/2)$, each buyer can afford both goods, so she buys both goods completely,
+and each seller's revenue is 1.
+Suppose seller 1 raises her price to $0.74$.
+Buyer $A$ still gets more utility per unit of money from good 1 than from good 2,
+so she buys good 1 completely and spends her remaining $0.26$ on good 2.
+Buyer $B$ buys good 2 completely and spends her remaining $0.5$ on good 1.
+Hence, seller 1's revenue increases to $1.24$, and seller 2's revenue drops to $0.76$
+(see \cref{fig:response-example}).
+So, $(1/2, 1/2)$ is not a Nash equilibrium.
+Higher prices do not help either.
+E.g., at prices $(1, 1)$, each buyer spends her entire budget on her favorite good,
+so each seller's revenue is 1.
+But then seller 1 can lower her price to just below $2/3$,
+so that both buyers prefer good 1 and buy it completely,
+which increases her revenue to almost $4/3$.
+In fact, this market has no Nash equilibrium
+(by \cref{thm:nasheq-uncommon} in \cref{sec:nasheq-uncommon}).
+\end{example}
+
+Prior work~\cite{chaudhury2026equilibrium} showed that even \emph{approximate} Nash equilibria may not exist
+for non-rivalrous goods, when there are just two sellers and buyers have linear utilities.
+We show that non-existence is the typical case, and not a pathological one.
+Consider a market with two non-rivalrous goods and $n \ge 2$ buyers,
+where each buyer $i$ has budget 1 and a linear utility function
+$u_i(\xvec) = u_{i,1}x_1 + u_{i,2}x_2$, where $u_{i,1}, u_{i,2} \in [1, 2)$.
+We show that such a market has a Nash equilibrium iff
+all buyers have the same ratio $u_{i,1}/u_{i,2}$ (\cref{thm:nasheq-uncommon}),
+irrespective of the allocation rule.
+Hence, if the coefficients $u_{i,j}$ are sampled independently
+from any continuous distribution over $[1, 2)$,
+then with probability 1, there is no Nash equilibrium.
+
+We obtain similar examples for rivalrous goods, where buyers have
+separable piecewise-linear concave (SPLC) utilities.
+The key idea is to split the unit supply of each rivalrous good into $n$ shares of size $1/n$,
+and to make each buyer's marginal utility for a good drop to a tiny positive value
+once she has received one share.
+Then each buyer behaves as if she were buying a copy of a non-rivalrous good.
+This allows us to carry over examples from the non-rivalrous setting.
+We describe this connection in detail in \cref{sec:lin-nonrival-to-splc-rival}.
+
+\paragraph{Sellers respond to deviations.}
+Return to \cref{ex:intro-no-nash}.
+After seller 1 raises her price from $1/2$ to $0.74$,
+seller 2 can match the new price by also charging $0.74$.
+By symmetry, each seller then earns 1 (see \cref{fig:response-example}).
+Seller 2 thereby increases her revenue from $0.76$ to 1
+and eliminates seller 1's gain.
+Anticipating this response removes seller 1's incentive to make the initial change.
+Price responsiveness also has familiar institutional forms;
+for example, Best Buy offers a price-match guarantee for qualifying
+competitor offers~\cite{BestBuyPriceMatch}.
+
+\begin{figure}[t]
+\centering
+\input{figs/response-example.tikz}
+\caption{The market of \cref{ex:intro-no-nash}.
+Each bar shows how a buyer splits her budget between the two goods.
+If seller 1 raises her price and seller 2 keeps her price fixed, then seller 1 gains.
+If seller 2 responds by matching seller 1's new price,
+then seller 2's revenue increases and seller 1's revenue drops back to its original value.}
+\label{fig:response-example}
+\end{figure}
+
+\paragraph{Response-Aware Rational Equilibrium (RARE).}
+Let $\pvec$ be a price vector, and suppose seller $j$ deviates by changing her price to $q_j$.
+A \emph{response} by the other sellers is a vector $\qvec_{-j}$ of new prices for them,
+and $\qvec \defeq (q_j, \qvec_{-j})$ is the price vector after the response.
+We say that the response is \emph{individually rational} (IR) if no responder loses by responding, i.e.,
+\[ R_k(\qvec) \ge R_k((q_j, \pvec_{-j})) \quad \text{for every responder } k \in [m] \setminus \{j\}. \]
+Note that each responder compares her revenue after responding
+to her revenue right after the deviation, and not to her revenue before the deviation.
+A price vector $\pvec$ is a \emph{Response-Aware Rational Equilibrium} (RARE) if
+every deviation can be deterred by an IR response, i.e.,
+for every seller $j$ and every deviation $q_j \ge 0$,
+there exists an IR response $\qvec_{-j}$ such that $R_j(\qvec) \le R_j(\pvec)$.
+Equivalently, no seller has a deviation that is profitable against every IR response.
+For $\kappa \ge 1$, we say that $\pvec$ is a \emph{$\kappa$-RARE} if
+we only require $R_j(\qvec) \le \kappa R_j(\pvec)$,
+i.e., if others respond, no seller can increase her revenue
+by more than a factor of $\kappa$ by deviating.
+
+Every Nash equilibrium is a RARE,
+since keeping the other sellers' prices unchanged is always an IR response.
+However, a RARE can exist even when there is no Nash equilibrium.
+In \cref{ex:intro-no-nash}, the prices $(1/2, 1/2)$ form a RARE.
+To see this, suppose seller 1 deviates to price $q_1$ (deviations by seller 2 are symmetric).
+If $q_1 < 1/2$, then seller 1's revenue is at most $2q_1 < 1$, so no response is needed.
+If $q_1 \ge 1/2$ and seller 1's revenue increases beyond 1,
+then seller 2's revenue drops below 1, since both buyers exhaust their budgets.
+Seller 2 can then match seller 1's price, after which each seller's revenue is exactly 1.
+This response is IR and eliminates seller 1's gain.
+The same argument shows that $(t, t)$ is a RARE for every $t \ge 1/2$,
+so a market can have many RARE.
+
+\paragraph{Why must each responder weakly gain?}
+RARE requires each responder to weakly gain by responding.
+One could instead only require that the responders' total revenue does not decrease.
+However, such a response may need some responders to sacrifice their revenue for the benefit of others,
+which is not credible unless the responders can pay each other.
+E.g., consider a market with three non-rivalrous goods and two buyers,
+each with budget 1 and utility $x_1 + x_2 + x_3$,
+where the allocation rule breaks ties between goods in favor of the lower-numbered good.
+At prices $(0.8, 0.8, 0.8)$, the sellers' revenues are $(1.6, 0.4, 0)$.
+If seller 2 deviates to price $0.5$, the revenues become $(1, 1, 0)$.
+If sellers 1 and 3 respond by changing their prices to $0.31$ and $0.49$, respectively,
+then the revenues become $(0.62, 0.4, 0.98)$ (see \cref{fig:ir-payments}).
+This response eliminates seller 2's gain and increases the responders' total revenue from 1 to $1.6$,
+but seller 1's revenue drops from 1 to $0.62$.
+So seller 1 has no reason to take part in this response, and RARE does not allow it.
+
+
+\begin{figure}[t]
+\centering
+\input{figs/ir-payments.tikz}
+\caption{The market with three goods from the paragraph on why each responder must gain.
+Each bar shows how a buyer splits her budget among the goods,
+which is also each seller's revenue per buyer.
+The response by sellers 1 and 3 eliminates seller 2's gain
+and increases the responders' total revenue,
+but seller 1's revenue drops compared to her revenue right after the deviation.
+Hence, RARE does not allow this response.}
+\label{fig:ir-payments}
+\end{figure}
+
+\subsection{Our Results}
+\label{sec:intro:results}
+
+Throughout this paper, we assume that every buyer's utility function is continuous,
+strictly monotone (i.e., getting more of any good strictly increases her utility),
+and is 0 for the empty bundle.
+Let $B \defeq \sum_{i=1}^n b_i$ be the buyers' total budget,
+and let $b_{\avg} \defeq B/n$ and $b_{\min} \defeq \min_{i=1}^n b_i$
+be the average and minimum budgets, respectively.
+
+\paragraph{Existence of RARE.}
+Our main result is that approximate RARE always exist when the allocation rule is continuous
+(\cref{thm:rare-exists-continuous-corr}).
+Specifically, in any market with a continuous allocation rule, a $\kappa$-RARE exists,
+where $\kappa = 1$ for rivalrous goods and $\kappa = b_{\avg}/b_{\min}$ for non-rivalrous goods.
+Hence, an exact RARE exists for rivalrous goods,
+and for non-rivalrous goods when all buyers have the same budget.
+This holds for any number of buyers and sellers, and does not require the utilities to be concave.
+Moreover, the RARE that we construct has high revenue:
+the sellers' total revenue is $B$ for rivalrous goods and $nb_{\min}$ for non-rivalrous goods.
+Our proof uses two nested applications of
+the Knaster--Kuratowski--Mazurkiewicz (KKM) lemma~\cite{KKM1929} (see \cref{sec:overview:exist}).
+
+\paragraph{When is the allocation rule continuous?}
+For non-rivalrous goods and strictly concave utilities,
+each buyer has a unique optimal bundle for each price vector,
+and the resulting allocation rule is continuous (\cref{thm:unique-nr-demand}).
+Hence, a $(b_{\avg}/b_{\min})$-RARE exists.
+For rivalrous goods, even when utilities are strictly concave,
+there can be many Pareto-optimal allocations at the same prices.
+A natural way to pick one of them is to maximize a \emph{welfare function} $W$ of the buyers' utilities.
+When utilities are strictly concave and $W$ is concave (and continuous and strictly monotone),
+there is a unique maximizer, and the resulting allocation rule is continuous (\cref{thm:unique-rival-demand}).
+Hence, a RARE exists.
+Such welfare functions include the (weighted) sum of utilities,
+and approximations of priority orders, Nash social welfare, and leximin welfare
+(see \cref{sec:exist:rival}).
+
+Linear utilities are concave but not strictly concave.
+For them, a buyer can have many optimal bundles,
+and every allocation rule can be discontinuous (\cref{ex:lin-util-dem-discont}).
+Still, we show that when utilities are concave, a slightly different form of $\kappa$-RARE exists,
+where instead of fixing an allocation rule,
+we can pick an optimal allocation separately for each deviation and response
+(\cref{thm:nonrival-rare-exists,thm:rival-rare-exists}).
+(For rivalrous goods, the allocation must maximize a fixed concave welfare function $W$.)
+We prove this by slightly perturbing the utilities to make them strictly concave,
+and then taking limits.
+
+
+
+\paragraph{Dynamics.}
+We also study a natural dynamic that leads to RARE (\cref{sec:dynamics}).
+For a seller $j$ and the other sellers' prices $\pvec_{-j}$,
+let $V_j(\pvec_{-j})$ be the highest revenue that seller $j$ can guarantee by deviating,
+assuming that the other sellers respond with the IR response that is worst for seller $j$
+(see \cref{defn:lim-RARE} for the formal definition).
+Then $\pvec$ is a RARE (up to an arbitrarily small additive error)
+iff $R_j(\pvec) \ge V_j(\pvec_{-j})$ for every seller $j$ (\cref{thm:rare-equiv-defn}).
+
+We describe our dynamic for non-rivalrous goods when all buyers have the same budget.
+All prices are initially 0.
+In each round, some of the sellers $j$ for which $p_j < V_j(\pvec_{-j})/n$
+raise their price to $V_j(\pvec_{-j})/n$.
+We show that throughout the dynamic, every buyer buys every good completely.
+Hence, a seller $j$ who raises her price ends up with revenue exactly $V_j(\pvec_{-j})$,
+and the other sellers' revenues do not change.
+In other words, each seller either keeps her price,
+or raises it to get the maximum revenue that she could have guaranteed herself by deviating.
+
+For $\delta \ge 0$, we say that $\pvec$ is a \emph{$\delta$-additive RARE}
+if we only require $R_j(\qvec) \le R_j(\pvec) + \delta$ in the definition of RARE.
+For continuous allocation rules, we show that if the sellers who raise their prices in each round
+include the \emph{most unsatisfied} seller (i.e., a seller maximizing $V_j(\pvec_{-j})/n - p_j$),
+then for every $\delta > 0$, the prices become a $\delta$-additive RARE within $\floor{B/\delta}$ rounds,
+and after some round, they remain a $\delta$-additive RARE forever
+(\cref{thm:dynamics-convergence}).
+This covers both the case where sellers update their prices one at a time,
+and the case where all unsatisfied sellers update their prices simultaneously.
+The same results hold for rivalrous goods (with arbitrary budgets),
+where each seller sells one unit of her good, so she raises her price to $V_j(\pvec_{-j})$ instead.
+
+\paragraph{Lean verification.}
+Our results on the existence of RARE, the convergence of dynamics to RARE,
+and the non-existence of Nash equilibrium
+have been formally verified in the Lean 4 proof assistant \cite{eklavya2026lean}.
+
+\paragraph{Open questions.}
+Our work raises several questions.
+Does an exact RARE always exist for non-rivalrous goods when buyers have different budgets?
+For rivalrous goods, which other natural allocation rules admit a RARE?
+How efficiently can one compute $V_j(\pvec_{-j})$ or a RARE?
+Finally, RARE can be defined for any game, so it would be interesting to study it beyond pricing games.
+
+\subsection{Further Related Work}
+\label{sec:intro:related}
+
+\paragraph{Data markets.}
+Jones and Tonetti~\cite{JonesTonetti2020} study the economic consequences
+of the non-rivalry of data.
+Chaudhury, Garg, Sharma, and Song~\cite{chaudhury2026equilibrium}
+study pricing in markets for non-rivalrous data with budget-constrained buyers.
+Our model also accommodates rivalrous goods, and our focus is response-aware stability.
+
+\paragraph{Anticipating responses.}
+The idea of anticipating responses has substantial precedent.
+In markets with asymmetric information,
+Wilson's anticipatory equilibrium~\cite{Wilson1977} evaluates a new offer
+assuming that existing offers that become unprofitable are withdrawn.
+In Riley's reactive equilibrium~\cite{Riley1979},
+a new offer is deterred if another firm can add a profitable counteroffer
+that makes the new offer unprofitable,
+and that stays profitable no matter what other offers are added later.
+These notions change the response that is considered after a deviation,
+and not merely the payoff at the original profile~\cite{Riley2001}.
+In RARE, the responders are the existing sellers, who change their prices jointly,
+and each responder must weakly gain compared to her revenue right after the deviation.
+Unlike in Riley's reactive equilibrium, the response need not be protected against further offers.
+
+
+\paragraph{Lookahead, opponent-aware learning, and conditional strategies.}
+Lookahead equilibria evaluate moves through predicted continuations of
+play, typically with a specified horizon and response
+process~\cite{MirrokniThainVetta2012,BiloFanelliMoscardelli2017}.
+LOLA anticipates and shapes opponents' learning updates, enabling
+cooperation in settings such as the iterated prisoner's
+dilemma~\cite{FoersterEtAl2018LOLA}.
+Repeated games and program equilibria support conditional behavior
+through histories of play and access to opponents' code or
+simulations~\cite{FudenbergMaskin1986,Tennenholtz2004,Cooper2025}.
+RARE instead defines admissible responses through joint individual
+rationality, without selecting a continuation, response order, or
+learning algorithm.
+Its stability criterion is defined in the original one-shot game,
+independently of the dynamics used to reach it.

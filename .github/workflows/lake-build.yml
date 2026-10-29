@@ -1,0 +1,60 @@
+name: lake-build
+on:
+  workflow_dispatch:
+  # push:
+    # branches: [main]
+  # pull_request:
+
+# A newer push to the same branch cancels an in-flight run.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lake-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The Lake project lives in `lean/`; the repo root holds only the paper and config.
+    defaults:
+      run:
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@v6
+
+      # --default-toolchain none: elan reads lean-toolchain, so CI can never drift from local.
+      - name: install-elan
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/v4.2.3/elan-init.sh \
+            | sh -s -- --default-toolchain none -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      # Keyed on the manifest: a dependency bump gets a fresh cache, everything else reuses it.
+      # Avoids re-downloading ~7 GB of Mathlib oleans each run.
+      # Only `.lake/packages` is cached: `.lake/build` holds *our* oleans, and caching them
+      # would freeze stale artifacts in place forever.
+      - name: restore-mathlib-oleans
+        id: cache
+        uses: actions/cache/restore@v6
+        with:
+          # `uses:` steps ignore `defaults.run.working-directory`, so these paths
+          # are relative to the repo root, not to `lean/`.
+          path: lean/.lake/packages
+          key: lake-${{ runner.os }}-${{ hashFiles('lean/lean-toolchain', 'lean/lake-manifest.json') }}
+
+      - name: fetch-mathlib-build-cache
+        run: lake exe cache get
+
+      # Saved before `lake build` runs, so a failing build still leaves a warm cache
+      # for the next attempt instead of re-downloading Mathlib each retry.
+      - name: save-mathlib-oleans
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: lean/.lake/packages
+          key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: lake-build
+        run: lake build

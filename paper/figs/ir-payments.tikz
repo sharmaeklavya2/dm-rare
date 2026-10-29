@@ -1,0 +1,32 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\fontsize{9}{10.8}\selectfont]
+\path[use as bounding box] (-.2,-.35) rectangle (15,5.25);
+\node at (7.4,4.94) {Two identical buyers: budget $1$, $u(x)=x_1+x_2+x_3$; ties favor $1$, then $2$, then $3$};
+\foreach \xc/\ttl/\price in {2.3/{Original}/{(.8,.8,.8)},7.4/{Seller 2 deviates}/{(.8,.5,.8)},12.5/{Joint response}/{(.31,.5,.49)}} {
+  \node[font=\fontsize{9}{10.8}\selectfont\bfseries] at (\xc,4.13) {\ttl};
+  \node at (\xc,3.57) {$p=\price$};
+}
+% One bar per profile: segment length equals revenue per buyer.
+\foreach \xc/\a/\b/\c in {2.3/.8/.2/0,7.4/.5/.5/0,12.5/.31/.2/.49} {
+  \fill[blue!24] ({\xc-2.05},2.22) rectangle ({\xc-2.05+4.1*\a},2.87);
+  \fill[orange!25] ({\xc-2.05+4.1*\a},2.22) rectangle ({\xc-2.05+4.1*(\a+\b)},2.87);
+  \ifdim\c pt>0pt
+    \fill[teal!28] ({\xc-2.05+4.1*(\a+\b)},2.22) rectangle ({\xc+2.05},2.87);
+    \fill[pattern=north east lines,pattern color=teal!40!black] ({\xc-2.05+4.1*(\a+\b)},2.22) rectangle ({\xc+2.05},2.87);
+  \fi
+  \draw[black!65] ({\xc-2.05},2.22) rectangle ({\xc+2.05},2.87);
+  \draw[black!65] ({\xc-2.05+4.1*\a},2.22)--({\xc-2.05+4.1*\a},2.87);
+  \ifdim\c pt>0pt\draw[black!65] ({\xc-2.05+4.1*(\a+\b)},2.22)--({\xc-2.05+4.1*(\a+\b)},2.87);\fi
+  \node at (\xc,1.8) {$R/2=(\a,\b,\c)$};
+}
+\draw[-{Stealth[length=2mm]},black!65,line width=.8pt] (4.52,2.55)--(5.18,2.55);
+\draw[-{Stealth[length=2mm]},black!65,line width=.8pt] (9.62,2.55)--(10.28,2.55);
+\node[align=center,text width=4.35cm] at (2.3,.83) {All bars show revenue\\\emph{per buyer}.};
+\node[align=center,text width=4.35cm] at (7.4,.83) {Seller 2 gains initially:\\$.2\longrightarrow .5$.};
+\node[align=center,text width=4.35cm] at (12.5,.83) {Response deters seller 2, but\\seller 1 loses: $.5\to .31$.};
+\node[draw=blue!55!black,fill=blue!24,minimum width=.23cm,minimum height=.16cm,inner sep=0] at (3.08,-.04) {};
+\node[anchor=west] at (3.3,-.04) {Seller 1};
+\node[draw=orange!70!black,fill=orange!25,minimum width=.23cm,minimum height=.16cm,inner sep=0] at (6.83,-.04) {};
+\node[anchor=west] at (7.05,-.04) {Seller 2};
+\node[draw=teal!65!black,fill=teal!28,pattern=north east lines,pattern color=teal!40!black,minimum width=.23cm,minimum height=.16cm,inner sep=0] at (10.58,-.04) {};
+\node[anchor=west] at (10.8,-.04) {Seller 3};
+\end{tikzpicture}

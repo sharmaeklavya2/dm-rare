@@ -1,0 +1,26 @@
+\begin{tikzpicture}[x=1cm,y=.9cm,font=\fontsize{9}{10.8}\selectfont,
+  dynstep/.style={draw=blue!65!black,line width=1.2pt,-{Stealth[length=2mm]}}]
+\path[use as bounding box] (-.2,-.4) rectangle (15,5.5);
+\coordinate (o) at (1,.6);
+\coordinate (pstar) at (4.6,2.6);
+\fill[black!3] (o)--(7,.6)--(1,5.6)--cycle;
+\fill[blue!8] (o) rectangle (pstar);
+\draw[black!55] (1,5.6)--(7,.6);
+\draw[blue!55!black,densely dotted,line width=.8pt] (1,2.6)--(pstar)--(4.6,.6);
+\draw[-{Stealth[length=2mm]},black!65] (.75,.6)--(7.35,.6) node[right] {$p_1$};
+\draw[-{Stealth[length=2mm]},black!65] (1,.35)--(1,5.72) node[above] {$p_2$};
+\node[anchor=north] at (1,.5) {$0$};
+\draw[dynstep] (o)--(2.2,.6);
+\draw[dynstep] (2.2,.6)--(2.2,1.4);
+\draw[dynstep] (2.2,1.4)--(3.25,1.4);
+\draw[dynstep] (3.25,1.4)--(3.25,1.82);
+\fill[blue!65!black] (3.25,1.82) circle (2.5pt);
+\node[anchor=south east,fill=white,inner sep=2pt] at (3.14,1.98) {May stop here};
+\fill[black] (pstar) circle (2.8pt);
+\node[anchor=south west,fill=white,inner sep=2pt] at (4.68,2.63) {$\pvec^* = (0.6, 0.4)$};
+\node[rotate=-40,fill=white,inner sep=1pt] at (2.7,4.23) {$p_1 + p_2 = 1$};
+\node[anchor=west,text width=6.3cm,align=left] at (8.7,4.4)
+ {\textbf{Invariant}\quad $\vecZero \le \pvec^{(t)} \le \pvec^*$\\The prices never exceed $\pvec^*$.};
+\node[anchor=west,text width=6.3cm,align=left] at (8.7,2.69)
+ {\textbf{Potential}\quad $\sum_{j=1}^m p_j$\\The sum of prices never decreases and is at most 1.};
+\end{tikzpicture}

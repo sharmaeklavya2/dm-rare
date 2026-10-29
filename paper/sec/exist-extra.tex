@@ -1,0 +1,355 @@
+\section{Details on Existence of RARE}
+\label{sec:exist-extra}
+
+\subsection{Security and Overpricing Parameters}
+\label{sec:exist-extra:market-params}
+
+Let $\evec_j$ denote the $j\Th$ standard basis vector in $\mathbb{R}^m$.
+We first isolate the utility estimate used in the security and overpricing arguments.
+
+\begin{lemma}[Uniform utility improvement]
+\label{thm:uniform-utility-improvement}
+Let $v: [0, 1] \times [0, 1]^m \to \mathbb{R}$ be continuous, and suppose that
+$v(\eps, \cdot)$ is strictly monotone for every $\eps \in [0, 1]$.
+Fix a good $k$ and $\eta \in (0, 1)$.
+There exists $\delta > 0$ such that, for every $\eps \in [0, 1]$ and
+$\zvec, \yvec \in [0, 1]^m$,
+\[ z_k \le 1 - \eta \quad \text{and} \quad
+    \norm{\yvec - (\zvec + \eta\evec_k)}_\infty < \delta
+    \implies v(\eps, \yvec) > v(\eps, \zvec). \]
+\end{lemma}
+\begin{proof}
+By continuity, strict monotonicity, and compactness,
+\[ \gamma \defeq \min_{\substack{\eps \in [0, 1], \; \zvec \in [0, 1]^m \\ z_k \le 1 - \eta}}
+    \bigl(v(\eps, \zvec + \eta\evec_k) - v(\eps, \zvec)\bigr) > 0. \]
+Uniform continuity of $v$ gives $\delta > 0$ such that changing the bundle
+by less than $\delta$ in the infinity norm changes its value by less than $\gamma/2$,
+uniformly over $\eps$.
+Thus, under the stated conditions,
+$v(\eps, \yvec) > v(\eps, \zvec + \eta\evec_k) - \gamma/2 > v(\eps, \zvec)$.
+\end{proof}
+
+\thmSecurity*
+\begin{proof}
+Fix seller $j$ and use buyer 1 to secure positive revenue.
+Apply \cref{thm:uniform-utility-improvement} with
+$v(\eps, \zvec) \defeq u_1(\zvec)$, $k = j$, and $\eta = 1/4$, obtaining $\delta_j > 0$.
+Set
+\[ \sigma_j \defeq b_1 \min(1, \delta_j), \qquad
+   \rho_j \defeq \frac{\sigma_j}{4}, \qquad
+   \lambda_j \defeq \frac{\sigma_j}{4b_1}. \]
+In particular, $0 < \lambda_j \le 1/4$ and $\lambda_j < \delta_j$.
+
+Fix prices with $q_j = \sigma_j$ and an allocation $\xvec \in \Dem(\qvec)$.
+Suppose that $\sum_i x_{i, j} < 1/4$.
+Replace only buyer 1's bundle by
+\[ \yvec_1 \defeq (1 - \lambda_j)\xvec_1 + \tfrac{1}{4}\evec_j. \]
+This bundle lies in $[0, 1]^m$, and its cost is at most
+\[ \qvec^T\yvec_1 \le (1 - \lambda_j)b_1 + \frac{\sigma_j}{4} = b_1. \]
+In the rivalrous setting, the modification also preserves the stock constraints:
+the total allocation of good $j$ is less than $1/2$, and every other total weakly decreases.
+Since $x_{1, j} < 1/4$ and
+\[ \norm{\yvec_1 - (\xvec_1 + \tfrac{1}{4}\evec_j)}_\infty
+    = \lambda_j\norm{\xvec_1}_\infty < \delta_j, \]
+\cref{thm:uniform-utility-improvement} gives $u_1(\yvec_1) > u_1(\xvec_1)$.
+This contradicts buyer 1's optimality in the non-rivalrous setting
+and Pareto optimality in the rivalrous setting.
+Hence $\sum_i x_{i, j} \ge 1/4$, so $R_j(\qvec, \xvec) \ge \sigma_j/4 = \rho_j$.
+\end{proof}
+
+\thmOverpricing*
+\begin{proof}
+Fix seller $j$, and let
+\[ a_j \defeq \frac{\rho_j}{2\kappa}, \qquad
+   \eta_j \defeq \min\biggl(\frac{1}{2}, \frac{a_j}{2nB}\biggr). \]
+For each buyer $i$ and good $k \ne j$, apply \cref{thm:uniform-utility-improvement}
+to $v(\eps, \zvec) \defeq u_i(\zvec)$ with increment $\eta_j$ in good $k$.
+Let $\delta_j > 0$ be the minimum of the resulting finitely many constants, and set
+\[ L_j \defeq \max\biggl(B, \sigma_j, \frac{B}{\delta_j}\biggr). \]
+
+Fix prices and demand $\xvec$ as in the statement, and suppose that
+$R_j(\qvec, \xvec) > a_j$.
+Choose a good $k \ne j$ with $q_k = B$, and a buyer $i$ with
+$q_jx_{i, j} > a_j/n$.
+We will replace buyer $i$'s purchases of good $j$ by $\eta_j$ units of good $k$.
+
+First, there is enough room for this increase in good $k$.
+In the non-rivalrous setting, buyer $i$'s budget constraint gives
+\[ Bx_{i, k} \le b_i - q_jx_{i, j} < B - a_j/n,
+    \qquad \text{so} \qquad x_{i, k} < 1 - 2\eta_j. \]
+In the rivalrous setting, summing the budget constraints gives
+\[ B \sum_{\ell = 1}^n x_{\ell, k}
+    \le B - R_j(\qvec, \xvec) < B - a_j. \]
+Thus the unsold quantity of good $k$ is greater than $a_j/B \ge 2n\eta_j$.
+In either setting, adding $\eta_j$ units of good $k$ to buyer $i$ is feasible
+with respect to the consumption and stock constraints.
+
+Now replace only buyer $i$'s bundle by
+\[ \yvec_i \defeq \xvec_i - x_{i, j}\evec_j + \eta_j\evec_k. \]
+Its cost decreases, since $q_jx_{i, j} > a_j/n$ and $B\eta_j \le a_j/(2n)$.
+Moreover,
+\[ \norm{\yvec_i - (\xvec_i + \eta_j\evec_k)}_\infty
+    = x_{i, j} \le \frac{b_i}{q_j} \le \frac{B}{q_j} < \delta_j. \]
+By \cref{thm:uniform-utility-improvement}, this strictly improves buyer $i$'s utility.
+As in the security proof, this contradicts demand in either setting.
+Consequently, $R_j(\qvec, \xvec) \le a_j$.
+\end{proof}
+
+\begin{restatable}[Robust parameters]{lemma}{thmRobustParams}
+\label{thm:robust-params}
+Let $\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+For every $\eps \in [0, 1]$, define the perturbed instance
+$\Ical^{(\eps)} \defeq ([n], [m], (u_i^{(\eps)})_{i=1}^n, (b_i)_{i=1}^n)$, where
+\[ u_i^{(\eps)}(\xvec) \defeq u_i(\xvec) + \eps \sum_{k=1}^m x_k(2-x_k). \]
+%
+There exist constants $\rho_j > 0$, $\sigma_j \ge \rho_j/\nu$, and $L_j \ge \max(B, \sigma_j)$
+for every seller $j \in [m]$, independent of $\eps$,
+such that for every $\eps \in [0, 1]$, seller $j \in [m]$, price vector $\qvec \in \mathbb{R}_{\ge 0}^m$,
+and allocation $\xvec \in \Dem(\qvec; \Ical^{(\eps)})$, both of the following hold:
+\begin{tightenum}
+\item (security) $q_j = \sigma_j \implies R_j(\qvec, \xvec) \ge \rho_j$.
+\item (overpricing)
+    $\displaystyle q_j > L_j \text{ and } \max_{k \in [m] \setminus \{j\}} q_k = B
+        \implies R_j(\qvec, \xvec) \le \frac{\rho_j}{2\kappa}$.
+\end{tightenum}
+\end{restatable}
+\begin{proof}
+For every buyer $i$, the function
+\[ v_i(\eps, \zvec) \defeq u_i(\zvec) + \eps \sum_{k = 1}^m z_k(2 - z_k) \]
+is jointly continuous in $(\eps, \zvec)$ and strictly monotone in $\zvec$.
+Indeed, $z \mapsto z(2 - z)$ is increasing on $[0, 1]$, and $u_i$ is strictly monotone.
+Thus \cref{thm:uniform-utility-improvement} applies uniformly over $\eps \in [0, 1]$.
+
+For each seller $j$, choose $\delta_j$ using that lemma with $v_1$, good $j$,
+and increment $1/4$, and set $\sigma_j = b_1 \min(1, \delta_j)$ and $\rho_j = \sigma_j/4$.
+The feasible bundle modification in the proof of \cref{thm:security}
+then gives the security bound for every $\eps \in [0, 1]$ with these same constants.
+
+Next, set $a_j = \rho_j/(2\kappa)$ and
+$\eta_j = \min(1/2, a_j/(2nB))$.
+Apply \cref{thm:uniform-utility-improvement} to every $v_i$ and good $k \ne j$
+with increment $\eta_j$, and let $\widehat{\delta}_j > 0$ be the minimum of its constants.
+Set $L_j = \max(B, \sigma_j, B/\widehat{\delta}_j)$.
+The feasible bundle modification in the proof of \cref{thm:overpricing}
+now gives the overpricing bound for every $\eps \in [0, 1]$.
+All of these parameters are independent of $\eps$.
+\end{proof}
+
+\subsection{RARE for Continuous Allocation Rule}
+\label{sec:exist-extra:continuous}
+
+\begin{lemma}
+\label{thm:superlevel-closed}
+Let $C \subseteq \mathbb{R}^m$ be a closed set and let $f: C \to \mathbb{R}$ be continuous.
+Then the set $S = \{\xvec \in C: f(\xvec) \ge 0\}$ is closed.
+\end{lemma}
+\begin{proof}
+Since $\mathbb{R}^m$ is a metric space, it suffices to show that
+$S$ contains the limits of all its convergent sequences.
+
+Let $(\xvec^{(k)})_{k \in \N}$ be a sequence in $S$ with $\xvec^{(k)} \to \xvec$
+for some $\xvec \in \mathbb{R}^m$. We must show $\xvec \in S$.
+
+First, each $\xvec^{(k)} \in S \subseteq C$, and $C$ is closed, so $\xvec \in C$.
+In particular, $f(\xvec)$ is defined.
+
+Second, since $f$ is continuous on $C$ and $(\xvec^{(k)})$ is a sequence in $C$
+converging to $\xvec \in C$, we have $f(\xvec^{(k)}) \to f(\xvec)$.
+Each $f(\xvec^{(k)}) \ge 0$, and $[0, \infty)$ is closed in $\mathbb{R}$,
+so $f(\xvec) = \lim_{k \to \infty} f(\xvec^{(k)}) \ge 0$.
+
+Hence $\xvec \in C$ and $f(\xvec) \ge 0$, i.e., $\xvec \in S$. Therefore $S$ is closed.
+\end{proof}
+
+\subsection{Limits of Affordable Allocations and Maximizers}
+\label{sec:exist-extra:limits}
+
+The following two lemmas will be used for both non-rivalrous and rivalrous demand.
+
+\begin{lemma}[Limits of affordable allocations]
+\label{thm:affordable-limits}
+For each price vector $\pvec \in \mathbb{R}_{\ge 0}^m$ and buyer $i$, let
+$K_i(\pvec) \defeq \{\zvec \in [0, 1]^m: \pvec^T\zvec \le b_i\}$.
+Let $\mathcal{F}(\pvec)$ be either $\prod_{i=1}^n K_i(\pvec)$ or $\AffR(\pvec)$.
+These sets are nonempty, compact, and convex.
+If $\pvec^{(t)} \to \pvec$, then:
+\begin{tightenum}
+\item If $\xvec^{(t)} \in \mathcal{F}(\pvec^{(t)})$ and $\xvec^{(t)} \to \xvec$,
+    then $\xvec \in \mathcal{F}(\pvec)$.
+\item For every $\xvec \in \mathcal{F}(\pvec)$, there are
+    $\xvec^{(t)} \in \mathcal{F}(\pvec^{(t)})$ with $\xvec^{(t)} \to \xvec$.
+\end{tightenum}
+\end{lemma}
+\begin{proof}
+Both sets contain the zero allocation and are bounded sets defined by closed linear inequalities,
+so they are compact and convex.
+The first claim follows by taking limits in these inequalities.
+
+For the second claim, fix $\xvec \in \mathcal{F}(\pvec)$ and set
+\[ \alpha_i^{(t)} \defeq
+    \frac{b_i}{\max\{b_i, (\pvec^{(t)})^T\xvec_i\}},
+    \qquad \xvec_i^{(t)} \defeq \alpha_i^{(t)}\xvec_i. \]
+Each $\alpha_i^{(t)}$ lies in $(0, 1]$, and $\xvec_i^{(t)}$ is affordable at $\pvec^{(t)}$.
+Scaling bundles down preserves the consumption bounds and, in the rivalrous setting,
+the stock constraints. Thus $\xvec^{(t)} \in \mathcal{F}(\pvec^{(t)})$.
+Since $\pvec^T\xvec_i \le b_i$ and $b_i > 0$, we have $\alpha_i^{(t)} \to 1$,
+and hence $\xvec^{(t)} \to \xvec$.
+\end{proof}
+
+\begin{lemma}[Limits of maximizers]
+\label{thm:maximizer-limits}
+Let $\mathcal{F}$ be either of the feasible sets in \cref{thm:affordable-limits}.
+Let $V_t, V: [0, 1]^{n \times m} \to \mathbb{R}$ be continuous functions such that
+$V_t \to V$ uniformly.
+If $\pvec^{(t)} \to \pvec$, $\xvec^{(t)} \to \xvec$, and
+\[ \xvec^{(t)} \in \argmax_{\yvec \in \mathcal{F}(\pvec^{(t)})} V_t(\yvec), \]
+then $\xvec \in \argmax_{\yvec \in \mathcal{F}(\pvec)} V(\yvec)$.
+\end{lemma}
+\begin{proof}
+By \cref{thm:affordable-limits}, $\xvec \in \mathcal{F}(\pvec)$.
+Fix any $\yvec \in \mathcal{F}(\pvec)$, and use the same lemma to choose
+$\yvec^{(t)} \in \mathcal{F}(\pvec^{(t)})$ with $\yvec^{(t)} \to \yvec$.
+Optimality gives $V_t(\xvec^{(t)}) \ge V_t(\yvec^{(t)})$.
+Uniform convergence and continuity of $V$ imply that the two sides converge to
+$V(\xvec)$ and $V(\yvec)$, respectively.
+Thus $V(\xvec) \ge V(\yvec)$, as required.
+\end{proof}
+
+\subsection{RARE for Non-Rivalrous Goods}
+\label{sec:exist-extra:non-rival}
+
+\thmUniqueNrDemand*
+\begin{proof}
+Let $V(\xvec) \defeq \sum_{i=1}^n u_i(\xvec_i)$.
+Maximizing $V$ over $\prod_i K_i(\pvec)$ is equivalent to maximizing each buyer's utility
+over her affordable bundles, so its set of maximizers is exactly $\DemNR(\pvec)$.
+The objective is continuous and strictly concave, and the feasible set is nonempty,
+compact, and convex by \cref{thm:affordable-limits}.
+Consequently, there is a unique maximizer $A(\pvec)$.
+
+To prove continuity, let $\pvec^{(t)} \to \pvec$.
+The allocations $A(\pvec^{(t)})$ lie in the compact set $[0, 1]^{n \times m}$.
+By \cref{thm:maximizer-limits} with $V_t = V$, every convergent subsequence of these
+allocations has limit in $\DemNR(\pvec) = \{A(\pvec)\}$.
+It follows that the whole sequence converges to $A(\pvec)$, proving continuity.
+\end{proof}
+
+\begin{lemma}[Demand survives limits]
+\label{thm:demand-limit}
+Let $\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+For every $\eps \in [0, 1]$, define the perturbed instance
+$\Ical^{(\eps)} \defeq ([n], [m], (u_i^{(\eps)})_{i=1}^n, (b_i)_{i=1}^n)$, where
+\[ u_i^{(\eps)}(\xvec) \defeq u_i(\xvec) + \eps \sum_{j=1}^m x_j(2 - x_j). \]
+If $(\eps_t)_{t \in \N} \to 0$, $(\qvec^{(t)})_{t \in \N} \to \qvec$, $(\xvec^{(t)})_{t \in \N} \to \xvec$,
+and $\xvec^{(t)} \in \DemNR(\qvec^{(t)}; \Ical^{(\eps_t)})$, then $\xvec \in \DemNR(\qvec; \Ical)$.
+\end{lemma}
+\begin{proof}
+Define
+\[ V_t(\yvec) \defeq \sum_{i=1}^n u_i^{(\eps_t)}(\yvec_i),
+    \qquad V(\yvec) \defeq \sum_{i=1}^n u_i(\yvec_i). \]
+Since $0 \le z(2 - z) \le 1$ on $[0, 1]$, we have
+$\sup_{\yvec \in [0, 1]^{n \times m}} |V_t(\yvec) - V(\yvec)| \le nm\eps_t \to 0$.
+The budgets are unchanged by perturbation, and $\xvec^{(t)}$ maximizes $V_t$
+over $\prod_i K_i(\qvec^{(t)})$.
+By \cref{thm:maximizer-limits}, $\xvec$ maximizes $V$ over $\prod_i K_i(\qvec)$,
+which is equivalent to $\xvec \in \DemNR(\qvec; \Ical)$.
+\end{proof}
+
+\subsection{RARE for Rivalrous Goods}
+\label{sec:exist-extra:rival}
+
+\begin{lemma}[Demand survives limits]
+\label{thm:demand-limit-rival}
+Let $\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+Let $W: \mathbb{R}_{\ge 0}^n \to \mathbb{R}$ be a continuous, strictly monotone function.
+For every $\eps \in [0, 1]$, define the perturbed instance
+$\Ical^{(\eps)} \defeq ([n], [m], (u_i^{(\eps)})_{i=1}^n, (b_i)_{i=1}^n)$, where
+\[ u_i^{(\eps)}(\xvec) \defeq u_i(\xvec) + \eps \sum_{j=1}^m x_j(2 - x_j). \]
+If $(\eps_t)_{t \in \N} \to 0$, $(\qvec^{(t)})_{t \in \N} \to \qvec$, $(\xvec^{(t)})_{t \in \N} \to \xvec$,
+and $\xvec^{(t)} \in \Dem^W(\qvec^{(t)}; \Ical^{(\eps_t)})$, then $\xvec \in \Dem^W(\qvec; \Ical)$.
+\end{lemma}
+\begin{proof}
+Define
+\begin{align*}
+V_t(\yvec) & \defeq W\bigl(u_1^{(\eps_t)}(\yvec_1), \ldots, u_n^{(\eps_t)}(\yvec_n)\bigr), \\
+V(\yvec) & \defeq W\bigl(u_1(\yvec_1), \ldots, u_n(\yvec_n)\bigr).
+\end{align*}
+For each $i$, $u_i^{(\eps_t)}$ converges uniformly to $u_i$, with error at most $m\eps_t$.
+All utility vectors lie in the compact box $\prod_i [0, u_i(\vecOne) + m]$.
+Uniform continuity of $W$ on this box therefore gives uniform convergence $V_t \to V$.
+The feasible set $\AffR$ depends only on prices and budgets, so it is unchanged by perturbation.
+Apply \cref{thm:maximizer-limits} to conclude that $\xvec$ maximizes $V$ over $\AffR(\qvec)$,
+i.e., $\xvec \in \Dem^W(\qvec; \Ical)$.
+\end{proof}
+
+\thmUniqueRivalDemand*
+\begin{proof}
+Let $V(\xvec) \defeq W(u_1(\xvec_1), \ldots, u_n(\xvec_n))$.
+We first show that $V$ is strictly concave.
+Fix distinct allocations $\xvec, \yvec$ and $\lambda \in (0, 1)$, and write
+\[ \avec \defeq (u_i(\xvec_i))_{i=1}^n, \qquad
+    \bvec \defeq (u_i(\yvec_i))_{i=1}^n, \qquad
+    \mathbf{c} \defeq (u_i(\lambda\xvec_i + (1 - \lambda)\yvec_i))_{i=1}^n. \]
+Concavity of the utilities gives $\mathbf{c} \ge \lambda\avec + (1 - \lambda)\bvec$ coordinatewise.
+Since $\xvec_i \ne \yvec_i$ for some buyer $i$, strict concavity of $u_i$
+makes at least one of these inequalities strict.
+Strict monotonicity and concavity of $W$ now give
+\begin{align*}
+V(\lambda\xvec + (1 - \lambda)\yvec)
+    & = W(\mathbf{c}) > W(\lambda\avec + (1 - \lambda)\bvec) \\
+    & \ge \lambda V(\xvec) + (1 - \lambda)V(\yvec).
+\end{align*}
+Thus $V$ is continuous and strictly concave.
+Since $\AffR(\pvec)$ is nonempty, compact, and convex,
+its maximizer $A(\pvec)$ is unique.
+Strict monotonicity of $W$ ensures that this maximizer is Pareto optimal,
+so $A$ is an allocation rule.
+
+Finally, let $\pvec^{(t)} \to \pvec$.
+By compactness of $[0, 1]^{n \times m}$ and \cref{thm:maximizer-limits} with $V_t = V$,
+every convergent subsequence of $A(\pvec^{(t)})$ has limit equal to the unique maximizer $A(\pvec)$.
+Hence $A(\pvec^{(t)}) \to A(\pvec)$, proving continuity.
+\end{proof}
+
+\thmRivalRareExists*
+\begin{proof}
+For $\eps \in [0, 1]$, let $\Ical^{(\eps)}$ have utilities
+\[ u_i^{(\eps)}(\zvec) \defeq u_i(\zvec) + \eps \sum_{k = 1}^m z_k(2 - z_k). \]
+Choose common parameters $\sigma_j, \rho_j, L_j$ using \cref{thm:robust-params}.
+For $\eps_t = 1/t$, the perturbed utilities are strictly concave.
+By \cref{thm:unique-rival-demand}, their $W$-rivalrous demand defines a unique continuous
+allocation rule $A^{(\eps_t)}$.
+Apply \cref{thm:rare-exists-continuous} with $\nu = \kappa = 1$ and $\beta = B$ to obtain
+prices $\pvec^{(t)} \in B\Delta_m$ such that $p_j^{(t)} \ge \rho_j$ for every $j$.
+Let $\xvec^{(t)} \defeq A^{(\eps_t)}(\pvec^{(t)})$.
+Then $R_j(\pvec^{(t)}, \xvec^{(t)}) = p_j^{(t)}$ by \cref{thm:accounting}.
+
+By compactness, pass to a joint convergent subsequence
+\[ (\pvec^{(t)}, \xvec^{(t)}) \to (\pvec, \xvec)
+    \in B\Delta_m \times [0, 1]^{n \times m}. \]
+Relabel this subsequence and its perturbations using the same notation;
+we still have $\eps_t \to 0$.
+Fix this subsequence before choosing a seller or deviation.
+The lower bound gives $p_j \ge \rho_j > 0$, so $\pvec \in B\Delta_m^\circ$.
+By \cref{thm:demand-limit-rival}, $\xvec \in \Dem^W(\pvec; \Ical)$.
+Continuity of revenue in prices and allocations gives $R_j(\pvec, \xvec) = p_j$ for every $j$.
+
+Fix a seller $j$ and a deviation price $q_j \ge 0$.
+For each $t$, \cref{thm:rare-exists-continuous} gives a response
+$\qvec_{-j}^{(t)} \in \prod_{k \ne j} [p_k^{(t)}, L_k]$.
+With $\qvec^{(t)} = (q_j, \qvec_{-j}^{(t)})$ and
+$\zvec^{(t)} \defeq A^{(\eps_t)}(\qvec^{(t)})$, its revenue guarantees are
+\[ R_j(\qvec^{(t)}, \zvec^{(t)}) \le p_j^{(t)}, \qquad
+    R_k(\qvec^{(t)}, \zvec^{(t)}) \ge p_k^{(t)} \quad \text{for every }k \ne j. \]
+The pairs $(\qvec_{-j}^{(t)}, \zvec^{(t)})$ lie in the compact set
+$\bigl(\prod_{k \ne j} [0, L_k]\bigr) \times [0, 1]^{n \times m}$.
+Take a further joint convergent subsequence with limit $(\qvec_{-j}, \zvec)$.
+This further subsequence may depend on $j$ and $q_j$, but the limits
+$\pvec, \xvec$ remain fixed and $\eps_t \to 0$ still holds.
+We have $\qvec_{-j} \in \prod_{k \ne j} [p_k, L_k]$ and
+$\zvec \in \Dem^W(\qvec; \Ical)$ by \cref{thm:demand-limit-rival}.
+Taking limits in the revenue inequalities gives
+\[ R_j(\qvec, \zvec) \le p_j = R_j(\pvec, \xvec), \qquad
+    R_k(\qvec, \zvec) \ge p_k \quad \text{for every }k \ne j, \]
+as required.
+\end{proof}

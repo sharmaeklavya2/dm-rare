@@ -1,0 +1,189 @@
+\section{Preliminaries}
+\label{sec:prelims}
+
+\paragraph{Notation.}
+For any non-negative integer $t$, let $[t] \defeq \{1, 2, \ldots, t\}$.
+%
+For any vector $\zvec \in \mathbb{R}^m$, $z_j$ denotes the $j\Th$ coordinate
+and $\zvec_{-j} \in \mathbb{R}^{[m] \setminus \{j\}}$ denotes the remaining coordinates.
+For any $s \in \mathbb{R}$, we write $(s, \zvec_{-j})$ to denote the vector in $\mathbb{R}^m$
+whose $j\Th$ coordinate is $s$ and the remaining coordinates are given by $\zvec_{-j}$.
+Define $\support(\zvec) = \{j \in [m]: z_j > 0\}$.
+
+\subsection{Utilities, Budgets, and the Market}
+
+We now formally define the market model we study.
+It is very similar to a Fisher market \cite{vazirani2007combinatorial}.
+
+A market instance is a tuple
+$\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$.
+Here $[n]$ is the set of buyers and $[m]$ is the set of (divisible) goods. We assume $n \ge 1$ and $m \ge 2$ throughout the paper. Each buyer $i \in [n]$ has a \emph{budget} $b_i > 0$
+and a utility function $u_i: [0, 1]^m \to \mathbb{R}_{\ge 0}$,
+where $u_i(\zvec)$ is buyer $i$'s value for a bundle containing
+a $z_j$ fraction of each good $j \in [m]$.
+
+Let $B \defeq \sum_{i=1}^n b_i$ denote the total budget,
+$b_{\avg} \defeq B/n$ be the average budget across buyers,
+and $b_{\min} \defeq \min_{i=1}^n b_i$ be the minimum budget across buyers.
+
+For each buyer $i$, we assume the following:
+\begin{tightenum}
+\item The value of an empty bundle is zero, i.e., $u_i(\vecZero) = 0$.
+\item $u_i$ is continuous, so a small change to the bundle doesn't change the utility much.
+\item Getting more of any good increases utility. We model this as $u_i$ being strictly monotone,
+    i.e., for any two distinct vectors $\xvec, \yvec \in [0, 1]^m$
+    such that $x_j \le y_j$ for all $j$, we have $u_i(\xvec) < u_i(\yvec)$.
+\end{tightenum}
+
+A useful special case is \emph{linear utilities}:
+each buyer $i$ gets utility $u_{i,j} > 0$ from each good $j$,
+and $u_i(\zvec) = \sum_{j=1}^m u_{i,j} \cdot z_j$.
+
+\subsection{Buyers' Demands}
+
+Having defined the buyers' utilities and budgets, we now describe their demand model, i.e., what they spend their money on given the goods' prices. The demand model depends on whether the goods are rivalrous or not. We begin with the simpler case where the goods are non-rivalrous, i.e., where each good can be copied and given to multiple buyers.
+
+\paragraph{Demand for non-rivalrous goods.}
+Suppose good $j$ is priced at $p_j \ge 0$.
+Given the vector $\pvec \defeq (p_1, \ldots, p_m)$ of prices,
+each buyer $i$ purchases a utility-maximizing bundle subject to her budget constraint:
+formally, buyer $i$'s \emph{demand set} is
+\[ \Dem_i(\pvec; \Ical) \defeq \argmax_{\zvec \in [0, 1]^m:\,\pvec^T\zvec \le b_i} u_i(\zvec). \]
+%
+\begin{comment}
+For linear utilities, each bundle $\zvec \in \Dem_i(\pvec; \Ical)$ is
+an optimal solution to a fractional knapsack problem,
+so it satisfies a bang-per-buck-ordering condition: for any goods $j, k \in [m]$, we have
+\begin{equation}
+\frac{p_j}{u_{i,j}} < \frac{p_k}{u_{i,k}} \implies (z_j = 1 \text{ or } z_k = 0).
+\end{equation}
+\end{comment}
+%
+Let $\DemNR(\pvec; \Ical) \defeq \prod_{i=1}^n \Dem_i(\pvec; \Ical)$ be the
+\emph{combined non-rivalrous demand set}, i.e.,
+$\xvec \in \DemNR(\pvec; \Ical)$ denotes that each buyer $i$ purchased an $x_{i,j}$ fraction of each good $j$.
+When $\Ical$ is clear from context, we simply write $\Dem_i(\pvec)$ and $\DemNR(\pvec)$
+instead of $\Dem_i(\pvec; \Ical)$ and $\DemNR(\pvec; \Ical)$.
+
+\paragraph{Demand for rivalrous goods.}
+When the goods are non-rivalrous, the buyers can make purchase decisions independently.
+But when the goods are rivalrous and the prices are low enough, multiple buyers may want the same good.
+For example, let there be two goods having prices \$1 each, and two buyers having budgets \$2 each.
+Then both buyers would like to purchase both goods entirely, but that is not possible, due to the rivalrous nature of the goods.
+
+We need a method to decide how each good is distributed among the buyers. We study a broad class of such methods, based on a property we believe any reasonable method should satisfy: \emph{Pareto-optimality among buyers}.
+We now define this formally.
+
+For any allocation $\xvec \in [0, 1]^{n \times m}$,
+let $\xvec_i$ denote buyer $i$'s bundle $(x_{i,1}, \ldots, x_{i,m})$. We say that an allocation $\xvec \in [0, 1]^{n \times m}$ \emph{Pareto dominates}
+another allocation $\yvec \in [0, 1]^{n \times m}$, denoted as $\xvec \succ_{\Ical} \yvec$, if
+for each buyer $i \in [n]$, we have $u_i(\xvec_i) \ge u_i(\yvec_i)$
+and for some buyer $i \in [n]$, we have $u_i(\xvec_i) > u_i(\yvec_i)$.
+For any set $\Scal \subseteq [0, 1]^{n \times m}$ of allocations,
+define its \emph{Pareto optimal subset} as allocations in $\Scal$ that are not Pareto dominated
+by any other allocation in $\Scal$, i.e.,
+\[ \PO(\Scal; \Ical) \defeq \{\xvec \in \Scal: \yvec \not\succ_{\Ical} \xvec \text{ for all } \yvec \in \Scal\}. \]
+%
+We are now ready to define our demand model.
+Let the set of \emph{affordable rivalrous allocations} be
+\[ \AffR(\pvec; \Ical) \defeq \bigg\{\xvec \in [0, 1]^{n \times m}:
+    \bigg(\sum_{i=1}^n x_{i,j} \le 1 \;\forall j \in [m]\bigg) \text{ and }
+    \bigg(\sum_{j=1}^m p_jx_{i,j} \le b_i \;\forall i \in [n]\bigg)\bigg\}. \]
+Then the \emph{combined rivalrous demand} is defined as
+the Pareto-optimal subset among affordable allocations, i.e.,
+$\DemR(\pvec; \Ical) \defeq \PO(\AffR(\pvec; \Ical); \Ical)$.
+When $\Ical$ is clear from context, we omit it from $\DemR$, $\AffR$, and $\PO$.
+
+In fact, one can show that such a description is also true for non-rivalrous goods.
+
+\begin{observation}
+If we define the set of \emph{affordable non-rivalrous allocations} as
+\[ \AffNR(\pvec; \Ical) \defeq \prod_{i=1}^n \{\zvec \in [0, 1]^m: \pvec^T\zvec \le b_i\}, \]
+then $\DemNR(\pvec) = \PO(\AffNR(\pvec))$.
+\end{observation}
+
+Note that when there is only one buyer, the rivalrous and non-rivalrous settings coincide.
+
+\paragraph{Allocation rule.}
+The demand sets ($\DemR(\pvec)$ and $\DemNR(\pvec)$) capture the buyers' purchasing preferences,
+but they still don't specify their behavior completely.
+For example, with two identical goods having prices \$1 each,
+and a buyer with budget \$1 and linear utilities,
+it is unclear how the buyer would split her budget among the goods,
+since every split is utility-maximizing for her.
+Thus, we specify their behavior using an \emph{allocation rule}.
+
+An \emph{allocation rule} $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ is a function that maps a price vector $\pvec$ to an allocation in the demand set (either $\DemR(\pvec)$ or $\DemNR(\pvec)$, depending on whether the goods are rivalrous or not).
+
+For non-rivalrous goods, the allocation rule specifies how each buyer breaks ties among
+utility-maximizing bundles. For rivalrous goods, the allocation rule additionally
+specifies how we break ties among multiple buyers who want the same good.
+
+\subsection{Sellers' Revenues and Equilibria}
+
+Now that we can model how buyers react to prices,
+we can talk about the revenue from each good.
+
+Each good has a corresponding seller.
+For prices $\pvec \in \mathbb{R}_{\ge 0}^m$ and allocation $\xvec \in [0, 1]^{n \times m}$,
+each seller $j$ earns revenue $R_j(\pvec, \xvec) \defeq p_j\sum_{i=1}^n x_{i,j}$.
+Under an allocation rule $A$, define seller $j$'s revenue as $R^A_j(\pvec) \defeq R_j(\pvec, A(\pvec))$.
+When the rule $A$ is clear from context, we write $R_j(\pvec)$ instead of $R^A_j(\pvec)$.
+
+The sellers are in a pricing game: each seller $j$ picks a price $p_j \ge 0$
+for her good, and receives a payoff $R^A_j(\pvec)$. Which prices will the sellers pick?
+A well-studied concept for this is Nash equilibrium.
+
+\begin{definition}[Nash equilibrium]
+\label{defn:nasheq}
+For market $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$
+and allocation rule $A: \mathbb{R}_{ \ge 0}^m \to [0, 1]^{n \times m}$,
+a price vector $\pvec \in \mathbb{R}_{ \ge 0}^m$ is a \emph{Nash equilibrium}
+if for any seller $j \in [m]$ and any deviation $s \in \mathbb{R}_{\ge 0}$,
+we have $R^A_j((s, \pvec_{-j})) \le R^A_j(\pvec)$, i.e.,
+the deviator $j$ does not gain by deviating.
+\end{definition}
+
+In \cref{sec:nasheq-uncommon}, we show that Nash equilibria do not always exist.
+Thus, we propose a new equilibrium notion, called RARE,
+based on the idea that when a seller deviates to a new price,
+the other sellers may respond by changing their own prices.
+
+\begin{definition}[RARE]
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market
+and $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be an allocation rule.
+For $\delta \ge 0$ and $\kappa \ge 1$, a price vector $\pvec \in \mathbb{R}_{\ge 0}^m$
+is a $\delta$-additive $\kappa$-multiplicative Response-Aware Rational Equilibrium
+($\delta$-additive $\kappa$-RARE)
+if for any seller $j \in [m]$, and any deviation $q_j \in \mathbb{R}_{\ge 0}$,
+there exists a response $\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m] \setminus \{j\}}$ such that
+\begin{enumerate}
+\item $R_j^A(\qvec) \le \kappa \cdot R_j^A(\pvec) + \delta$,
+    i.e., seller $j$ cannot gain much by deviating if others respond.
+\item No responder loses by responding, i.e., $R_k^A(\qvec) \ge R_k^A((q_j, \pvec_{-j}))$
+    for each responder $k \in [m] \setminus \{j\}$.
+\end{enumerate}
+We drop the specifier `$\delta$-additive' when $\delta = 0$,
+and we write RARE instead of 1-RARE.
+\end{definition}
+
+\subsection{The Simplex and the KKM Lemma}
+
+A key ingredient in our results is the KKM lemma, which describes conditions under which
+subsets of a simplex have a common intersection.
+To state this lemma, we first introduce some notation.
+
+For any $\beta \in \mathbb{R}_{> 0}$ and $m \in \N$,
+let $\beta\Delta_m \defeq \{\xvec \in \mathbb{R}_{\ge 0}^m: \sum_{j=1}^m x_j = \beta\}$
+be the standard $(m-1)$-dimensional simplex scaled by a factor $\beta$,
+and let $\beta\Delta_m^{\circ} \defeq \{\xvec \in \mathbb{R}_{> 0}^m: \sum_{j=1}^m x_j = \beta\}$
+be its relative interior.
+
+\begin{lemma}[Knaster--Kuratowski--Mazurkiewicz \cite{KKM1929}]
+\label{thm:kkm}
+Let $m \ge 1$, and let $C_1, \ldots, C_m$ be closed subsets of
+the scaled simplex $\beta\Delta_m$ for some $\beta > 0$.
+Suppose every vector $\xvec \in \beta\Delta_m$ is covered by the sets
+$\{C_j: j \in \support(\xvec)\}$, i.e., $\xvec \in C_j$ for some $j \in \support(\xvec)$.
+Then some point of $\beta\Delta_m$ lies in all the sets, i.e., $\bigcap_{j=1}^m C_j \ne \emptyset$.
+\end{lemma}

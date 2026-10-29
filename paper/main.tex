@@ -1,0 +1,87 @@
+\documentclass[11pt,fleqn]{article}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,patterns}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{xcolor}
+\usepackage{thm-restate}
+\usepackage{bm}
+%\usepackage{float}
+%\usepackage{array}
+\usepackage{comment}
+%\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hypertexnames=false,bookmarksnumbered=true,final]{hyperref}
+%\usepackage{algorithm,algpseudocode}
+\usepackage[capitalize,sort]{cleveref}
+
+\input{colorscheme.tex}
+\hypersetup{colorlinks,linkcolor=textRed,citecolor=textRed,urlcolor=textBlue}
+
+\title{RARE: Response-Aware Rational Equilibrium in Pricing Games}
+\author{
+Bhaskar Ray Chaudhury%
+\thanks{University of Illinois at Urbana-Champaign, USA}
+\\ \texttt{\small braycha@illinois.edu}
+\and
+Jugal Garg\footnotemark[1]
+\\ \texttt{\small jugal@illinois.edu}
+\and
+Xin Huang%
+\thanks{Kyushu University, Japan}
+\\ \texttt{\small huangxin@inf.kyushu-u.ac.jp}
+\and
+Eklavya Sharma\footnotemark[1]
+\\ \texttt{\small eklavya2@illinois.edu}
+}
+\date{\empty}
+
+\input{macros.tex}
+
+\begin{document}
+
+\pagenumbering{Alph}  % unique page labels for title page (avoids hyperref clash with page 1)
+\maketitle
+\thispagestyle{empty}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0.5em}
+
+\begin{abstract}
+\input{abstract.tex}
+\end{abstract}
+
+\newpage
+\pagenumbering{arabic}
+
+\tableofcontents
+\newpage
+
+\input{sec/intro.tex}
+\input{sec/overview.tex}
+\input{sec/prelims.tex}
+\input{sec/revenue-props.tex}
+\input{sec/exist.tex}
+\input{sec/dynamics.tex}
+
+\appendix
+\crefalias{section}{appendix}
+\crefalias{subsection}{appendix}
+\crefalias{subsubsection}{appendix}
+
+\input{sec/exist-extra.tex}
+    \input{sec/unbounded-unclosed.tex}
+\input{sec/lim-rare-equiv.tex}
+\input{sec/nasheq-uncommon.tex}
+
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{alphaurl}
+\bibliography{bibdb}
+
+\clearpage
+
+\phantomsection
+\addcontentsline{toc}{section}{AI Methodology Statement}
+\input{sec/ai-stmt.tex}
+
+\end{document}

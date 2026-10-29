@@ -1,0 +1,655 @@
+\section{Existence of RARE}
+\label{sec:exist}
+
+In this section, we prove the existence of (approximate) RARE.
+%
+We first show that when we fix an allocation rule that is \emph{continuous},
+then a $\kappa$-RARE always exists, where $\kappa$ is 1 for the rivalrous setting
+and $b_{\avg}/b_{\min}$ for the non-rivalrous setting.
+
+Then, we ask \emph{which} allocation rules are continuous,
+and that leads us to different answers
+for the rivalrous and non-rivalrous settings:
+\begin{enumerate}
+\item \textbf{Non-rivalrous setting}:
+    When buyers' utility functions are strictly concave, the demand set is a singleton at all prices,
+    so there is a unique allocation rule. Moreover, this allocation rule is continuous.
+    Thus, $(b_{\avg}/b_{\min})$-RARE always exists for strictly concave utilities.
+\item \textbf{Rivalrous setting}:
+    Even with strictly concave utilities, the demand set may not be a singleton.
+    But we identify a large class of natural allocation rules that are continuous,
+    proving that RARE exists for all of them.
+\end{enumerate}
+
+For linear utilities, we present instances where no allocation rule is continuous.
+Nevertheless, we prove that for concave (but not necessarily strictly concave) utilities,
+a variant of RARE holds.
+
+\subsection{Refining the Goal}
+
+A price vector $\pvec \in \mathbb{R}_{\ge 0}^m$ is $\kappa$-RARE iff
+\begin{quote}
+for every seller $j \in [m]$ and deviation $q_j \ge 0$,
+\\ there exists an individually rational response
+$\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m] \setminus \{j\}}$, such that
+\\ $R_j(\qvec) \le \kappa R_j(\pvec)$.
+\end{quote}
+
+We now sketch how to make the problem simpler by restricting our search space.
+First, we restrict our search for a $\kappa$-RARE price vector $\pvec$ to the simplex $\beta\Delta_m$.
+This puts it at the intersection of the low-price and high-price regimes from \cref{thm:accounting}:
+prices are low enough that buyers can afford all goods,
+but high enough to extract a $1/\kappa$ fraction of the total budget $B$.
+
+Next, we show how to restrict the deviation $q_j$ and the responses $\qvec_{-j}$.
+Fix an allocation rule and pick any price vector $\pvec \in \beta\Delta_m$.
+By \cref{thm:accounting}.\ref{item:rev-props:low-prices},
+each seller $k \in [m]$ earns revenue $R_k(\pvec) = \nu p_k$.
+If $q_j < p_j$, then the deviator $j$'s revenue will drop from $\nu p_j$ to at most $\nu q_j$,
+regardless of what the response $\qvec_{-j}$ is.
+Thus, we need $q_j \ge p_j$ for the deviation to make sense.
+
+For every respondent $k \neq j$, her revenue immediately after $j$'s deviation is
+$R_k((q_j, \pvec_{-j})) \le \nu p_k$.
+If every respondent $k \neq j$ raises her price to $q_k \ge p_k$,
+the total revenue rises (or remains the same), i.e., $R_{\all}(\qvec) \ge R_{\all}(\pvec)$.
+Then a response that preserves every seller $k$'s market share $R_k(\cdot)/R_{\all}(\cdot)$
+would be individually rational, since
+\[ R_k(\qvec) = \frac{R_k(\pvec)}{R_{\all}(\pvec)} R_{\all}(\qvec)
+    \ge R_k(\pvec) = \nu p_k \ge R_k((q_j, \pvec_{-j})). \]
+Moreover, we have $R_{\all}(\pvec) = \nu\beta$ and $R_{\all}(\qvec) \le B$, giving us
+\[ R_j(\qvec) = R_j(\pvec) \frac{R_{\all}(\qvec)}{R_{\all}(\pvec)} \le \kappa R_j(\pvec). \]
+The original market share of each seller $k \in [m]$ is $R_k(\pvec)/R_{\all}(\pvec) = p_k/\beta$.
+Hence, for $\pvec \in \beta\Delta_m$ to be a $\kappa$-RARE, it suffices to show that
+\begin{quote}
+for every seller $j \in [m]$ and deviation $q_j \in [p_j, \infty)$,
+\\ there exists a response $\qvec_{-j} \in \prod_{k \neq j} [p_k, \infty)$, such that
+\\ for every seller $k \in [m]$, we have $R_k(\qvec)/R_{\all}(\qvec) = p_k/\beta$.
+\end{quote}
+
+As hinted in \cref{sec:overview}, we will prove that such a $\pvec$ exists using KKM.
+To do so, for each seller $j$, we construct the set $C_j$ of price vectors
+where every deviation to a higher price has a market-share-preserving response:
+\[ C_j \defeq \bigg\{\pvec \in \beta\Delta_m:\; \forall q_j \in [p_j, \infty),\;
+    \exists \qvec_{-j} \in \!\!\!\!\!\prod_{k \in [m] \setminus \{j\}} \!\!\! [p_k, \infty) \text{ such that }
+    \forall k \in [m], \frac{R_k(\qvec)}{R_{\all}(\qvec)} = \frac{p_k}{\beta} \bigg\}. \]
+A price vector belonging to $\bigcap_{j=1}^m C_j$ would be $\kappa$-RARE.
+To show that this intersection is non-empty, we use KKM.
+We can prove that the sets $(C_j)_{j \in [m]}$ satisfy the covering condition
+by using an inner KKM, as outlined in \cref{sec:overview}.
+It remains to show that each $C_j$ is closed. But $C_j$ need not be closed!
+We give a counterexample in \cref{sec:unbounded-unclosed}.
+
+We work around this obstacle by restricting the deviation and response sets to be compact.
+In particular, we pick a large constant $L_k \gg B$ for each seller $k$,
+and we require $q_k \le L_k$ for all $k \in [m]$.
+With this change, the set
+\begin{equation}
+\label{eq:cover-sets}
+C_j \defeq \bigg\{\pvec \in \beta\Delta_m:\; \forall q_j \in [p_j, L_j],\;
+    \exists \qvec_{-j} \in \!\!\!\!\!\prod_{k \in [m] \setminus \{j\}} \!\!\! [p_k, L_k] \text{ such that }
+    \forall k \in [m], \frac{R_k(\qvec)}{R_{\all}(\qvec)} = \frac{p_k}{\beta} \bigg\}
+\end{equation}
+becomes closed (we prove this in \cref{thm:rare-exists-continuous-2}).
+
+It remains to show how to construct a response $\qvec_{-j}$ for deviations $q_j > L_j$.
+If a seller $j$ deviates to a sufficiently large price, then the other sellers should be able to
+easily out-compete her and drive down her revenue below $\nu p_j$.
+But it's not obvious how to do this while maintaining individual rationality.
+We do this by using another KKM!
+
+\subsection{Market-Share-Restoring Responses Using KKM}
+\label{sec:exist:kkm}
+
+To apply KKM on the sets $(C_j)_{j \in [m]}$ as defined by \cref{eq:cover-sets},
+we must prove the covering condition, i.e., for any $\pvec \in \beta\Delta_m$,
+we have $\pvec \in C_j$ for some $j \in \support(\pvec)$.
+Intuitively, this means that some seller $j$ with a positive price
+should be unable to increase her market share.
+
+We begin by proving a more general result: that some seller should be unable to \emph{gain}
+by increasing prices, for an arbitrary definition of gain, not just `increase in market share'.
+We prove this using KKM.
+(This general result will be useful again later when analyzing responses to very high deviations,
+i.e., the $q_j > L_j$ case.)
+
+\begin{lemma}
+\label{thm:general-inner-kkm}
+Let $J \neq \emptyset$ be a finite set of sellers. Let $\ell_j < h_j$ for all $j \in J$.
+Let $U$ be the union of the $|J|$ upper faces of the box $\prod_{j \in J} [\ell_j, h_j]$, i.e.,
+\[ U \defeq \bigg\{\xvec \in \prod_{j \in J} [\ell_j, h_j]: x_i = h_i \text{ for some } i \in J\bigg\}. \]
+For every $j \in J$, let $g_j: U \to \mathbb{R}$ be a continuous function
+(the gain function) where for all $\xvec \in U$, the following hold:
+\begin{itemize}
+\item (Total gain is non-negative) $\sum_{j \in J} g_j(\xvec) \ge 0$.
+\item (Non-positive gain at $\ell_j$) For all $j \in J$, $x_j = \ell_j \implies g_j(\xvec) \le 0$.
+\end{itemize}
+Then some $\xvec^* \in U$ satisfies $g_j(\xvec^*) \ge 0$ for all $j \in J$,
+i.e., we get a non-negative gain for all $j \in J$.
+\end{lemma}
+\begin{proof}
+For any $\theta \in \Delta_J \defeq \{\xvec \in \mathbb{R}_{\ge 0}^J: \sum_{j \in J} x_j = 1\}$,
+shoot a ray from $\bm{\ell} = (\ell_j)_{j \in J}$ in the direction $\theta$,
+and let $y(\theta)$ be the point on $U$ that the ray hits. Formally,
+\[ y(\theta) \defeq \bm{\ell} + \tau(\theta)\theta, \quad \text{where} \quad
+    \tau(\theta) \defeq \bigg(\max_{j \in J} \frac{\theta_j}{h_j - \ell_j}\bigg)^{-1}. \]
+For all $j \in J$, define
+\[ S_j \defeq \{\theta \in \Delta_J: g_j(y(\theta)) \ge 0 \}. \]
+We now use KKM (\cref{thm:kkm}) on the simplex $\Delta_J$
+to show that $\bigcap_{j \in J} S_j \neq \emptyset$.
+
+\textbf{Closedness.}
+For all $j \in J$, $y$ and $g_j$ are continuous, so $g_j \circ y$ is continuous.
+Since $S_j$ is the superlevel set of $g_j \circ y$, it is closed
+(see \cref{thm:superlevel-closed} in \cref{sec:exist-extra:continuous} for details).
+
+\textbf{Covering.}
+Suppose the covering condition doesn't hold,
+i.e., $\exists \theta \in \Delta_J$ such that $\theta \not\in S_j$
+for all $j \in \support(\theta) \defeq \{j \in J: \theta_j > 0\}$.
+Hence, $\theta_j > 0 \implies g_j(y(\theta)) < 0$ for all $j \in J$.
+For $j \in J \setminus \support(\theta)$, we have
+$\theta_j = 0 \implies y(\theta)_j = \ell_j \implies g_j(y(\theta)) \le 0$.
+Add all of these inequalities to get $\sum_{j \in J} g_j(y(\theta)) < 0$,
+which is a contradiction. Thus, the covering condition holds.
+
+By KKM, $\bigcap_{j \in J} S_j \neq \emptyset$. Let $\theta^* \in \bigcap_{j \in J} S_j$.
+Let $\xvec^* \defeq y(\theta^*)$. Then $\xvec^* \in U$ and $g_j(\xvec^*) \ge 0$ for all $j \in J$.
+\end{proof}
+
+We now prove that on the upper boundary of the box $\prod_{j=1}^m [p_j, z_j]$,
+one can find prices $\qvec$ that restore the market shares.
+We do this by applying \cref{thm:general-inner-kkm} with
+the gain function set to the increase in market share.
+
+\begin{restatable}[market shares on box boundary]{lemma}{thmPropBox}
+\label{thm:prop-box}
+Let $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be a continuous allocation rule.
+Let $\pvec \in \beta\Delta_m$ be a price vector
+and $M^+ \defeq \{j \in [m]: p_j > 0\}$ be the positive-priced goods.
+
+Let $\zvec \in \prod_{j \in M^+} (p_j, \infty) \times \{0\}^{[m] \setminus M^+}$
+be a vector of upper bounds on increased prices.
+Then there is another vector $\qvec$ on the boundary of the box $\prod_{j=1}^m [p_j, z_j]$
+that preserves market shares, i.e., all of the following hold:
+\begin{tightenum}
+\item $p_j \le q_j \le z_j$ for all $j \in [m]$.
+\item $q_i = z_i$ for some $i \in M^+$.
+\item $R_{\all}(\qvec) \ge R_{\all}(\pvec) = \nu\beta$.
+\item $\displaystyle \frac{R^A_j(\qvec)}{R_{\all}(\qvec)} = \frac{p_j}{\beta} = \frac{R^A_j(\pvec)}{R_{\all}(\pvec)}$
+    for all $j \in [m]$.
+\end{tightenum}
+\end{restatable}
+\begin{proof}
+We get $R^A_j(\pvec) = \nu p_j$ by \cref{thm:accounting},
+so $R_{\all}(\pvec) = \nu \sum_{j=1}^m p_j = \nu \beta$.
+
+Let
+\[ U \defeq \bigg\{\qvec \in \prod_{j \in M^+} [p_j, z_j] \times \{0\}^{[m] \setminus M^+}:
+    q_i = z_i \text{ for some } i \in M^+\bigg\} \]
+be the upper faces of the price-increase box,
+and for each $j \in M^+$, let the gain function $g_j$ be the increase in market share, i.e.,
+\[ g_j(\qvec) \defeq \frac{R_j(\qvec)}{R_{\all}(\qvec)} - \frac{p_j}{\beta}. \]
+$R_{\all}$ is monotonic in prices (\cref{thm:rall-mono}),
+so we get $R_{\all}(\qvec) \ge R_{\all}(\pvec) = \nu\beta$ for all $\qvec \in U$.
+Then $g_j$ is continuous and $\sum_{j \in M^+} g_j(\qvec) = 0$.
+Moreover, if $q_j = p_j$, then
+\[ R_j(\qvec) \le \nu p_j = R_j(\pvec)
+    \implies \frac{R_j(\qvec)}{R_{\all}(\qvec)} \le \frac{R_j(\pvec)}{R_{\all}(\pvec)}, \]
+so $g_j(\qvec) \le 0$.
+
+Hence, we can apply \cref{thm:general-inner-kkm}.
+This gives us $\qvec \in U$ such that $g_j(\qvec) \ge 0$ for all $j \in M^+$.
+Since $\sum_{j \in M^+} g_j(\qvec) = 0$, we have $g_j(\qvec) = 0$ for all $j \in M^+$.
+Hence, $R_j(\qvec)/R_{\all}(\qvec) = p_j/\beta$ for all $j \in M^+$,
+and this also holds for $j \in [m] \setminus M^+$ since $R_j(\qvec) = 0 = p_j$.
+\end{proof}
+
+We now apply KKM again to show that the sets $(C_j)_{j \in [m]}$ (as defined by \cref{eq:cover-sets})
+have a common point $\pvec$. The covering condition for the KKM follows from \cref{thm:prop-box}.
+At such a $\pvec$, for any seller $j \in [m]$ and deviation $q_j \in [p_j, L_j]$,
+there is a market-share-restoring response.
+
+\begin{lemma}
+\label{thm:rare-exists-continuous-2}
+Let $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be a continuous allocation rule
+and $L_j \ge \beta$ for each seller $j \in [m]$.
+%
+There exist prices $\pvec \in \beta\Delta_m$ such that for every seller $j \in [m]$,
+and every deviation $q_j \in [p_j, L_j]$ by seller $j$,
+there exists a response $\qvec_{-j} \in \prod_{k \neq j} [p_k, L_k]$ such that
+market shares are preserved, i.e.,
+\[ \frac{R_k^A(\qvec)}{R_{\all}(\qvec)} = \frac{p_k}{\beta}
+    \text{ for every seller } k \in [m]. \]
+\end{lemma}
+\begin{proof}
+For every $j \in [m]$, let $C_j$ be the price vectors where every bounded deviation by seller $j$
+can be met with a market-share-restoring response, i.e.,
+\[ C_j \defeq \bigg\{\pvec \in \beta\Delta_m:\; \forall q_j \in [p_j, L_j],\;
+    \exists \qvec_{-j} \in \!\!\!\!\!\prod_{k \in [m] \setminus \{j\}} \!\!\! [p_k, L_k] \text{ such that }
+    \forall k \in [m], \frac{R_k(\qvec)}{R_{\all}(\qvec)} = \frac{p_k}{\beta} \bigg\}. \]
+Our goal is to show that $\bigcap_{j=1}^m C_j \neq \emptyset$.
+We prove this using KKM (\cref{thm:kkm}).
+
+\textbf{Closedness.}
+We first show that $C_j$ is closed. Let $\pvec^{(t)} \in C_j$ converge to $\pvec \in \beta\Delta_m$.
+Fix any $q_j \in [p_j, L_j]$, and set $q_j^{(t)} \defeq \max(q_j, p_j^{(t)})$.
+Since $\pvec^{(t)} \in C_j$, there is a response
+$\qvec_{-j}^{(t)} \in \prod_{k \ne j} [p_k^{(t)}, L_k]$ such that
+\[ \frac{R_k(\qvec^{(t)})}{R_{\all}(\qvec^{(t)})}
+    = \frac{p_k^{(t)}}{\beta} \qquad \text{for every } k \in [m]. \]
+The responses lie in the compact box $\prod_{k \ne j} [0, L_k]$,
+so they must have a convergent subsequence.
+Let $\qvec_{-j}$ be the limit of that subsequence.
+
+By \cref{thm:rall-mono}, $R_{\all}(\qvec^{(t)}) \ge R_{\all}(\pvec^{(t)})$,
+since $\qvec^{(t)} \ge \pvec^{(t)}$ coordinatewise.
+Continuity of $A$ implies continuity of all revenue functions,
+so taking limits gives us $R_{\all}(\qvec) \ge R_{\all}(\pvec) = \nu\beta$,
+$q_k \ge p_k$ for all $k \in [m]$, and
+\[ \frac{R_k(\qvec)}{R_{\all}(\qvec)} = \frac{p_k}{\beta}
+    \qquad \text{for every }k \in [m]. \]
+Thus, $\qvec_{-j} \in \prod_{k \neq j} [p_k, L_k]$ is a market-share-restoring response
+to deviation $q_j$ and initial prices $\pvec$.
+Since $q_j$ was arbitrary, we get $\pvec \in C_j$. Thus $C_j$ is closed.
+
+\textbf{Covering.}
+Fix $\pvec \in \beta\Delta_m$ and let $S \defeq \{j \in [m]: p_j > 0\}$ be its support.
+Assume that the covering condition doesn't hold, i.e., $\pvec \not\in C_j$ for all $j \in S$.
+For each $j \in S$, $\pvec \not\in C_j$ implies
+\[ \exists q^{(j)}_j \in [p_j, L_j] \text{ such that }
+    \forall \qvec^{(j)}_{-j} \in \!\!\!\!\!\prod_{k \in [m] \setminus \{j\}} \!\!\! [p_k, L_k],\;
+    \exists k \in [m] \text{ such that } \frac{R_k(\qvec^{(j)})}{R_{\all}(\qvec^{(j)})} \neq \frac{p_k}{\beta}. \]
+Let $\zvec \in \mathbb{R}^m$ be a vector where $z_j \defeq q^{(j)}_j$ for $j \in S$
+and $z_j = 0$ for $j \in [m] \setminus S$.
+
+Suppose $z_j = p_j$ for some $j \in S$. Then for $\qvec^{(j)}_{-j} = \pvec_{-j}$ and every $k \in [m]$, we get
+\[ \frac{R_k(\qvec^{(j)})}{R_{\all}(\qvec^{(j)})} = \frac{R_k(\pvec)}{R_{\all}(\pvec)} = \frac{p_k}{\beta}, \]
+which is a contradiction. Hence, $z_j > p_j$ for all $j \in S$.
+
+By \cref{thm:prop-box}, there exist prices $\qvec$ such that
+\begin{tightenum}
+\item $p_j \le q_j \le z_j$ for all $j \in [m]$.
+\item $q_i = z_i$ for some $i \in S$.
+\item $R_{\all}(\qvec) \ge R_{\all}(\pvec) = \nu\beta$.
+\item $\displaystyle \frac{R^A_j(\qvec)}{R_{\all}(\qvec)} = \frac{p_j}{\beta}$ for all $j \in [m]$.
+\end{tightenum}
+Picking $\qvec^{(i)}_{-i} = \qvec_{-i}$ gives us a contradiction.
+Thus, the covering condition holds, so KKM applies.
+\end{proof}
+
+\subsection{The Futility of Large Deviations}
+\label{sec:exist:overpricing}
+
+\Cref{thm:rare-exists-continuous-2} gives us prices $\pvec$ such that
+if any seller $j$ deviates to price $q_j \in [p_j, L_j]$,
+there is a market-share-restoring response.
+We now show that by defining $L_j$ appropriately,
+we can construct a deterring response for $q_j \in (L_j, \infty)$.
+To do this, we introduce additional parameters.
+
+\paragraph{Security Parameters.}
+The first of these are \emph{security parameters} $\sigma_j$ and $\rho_j$ for each seller $j$.
+These say that if seller $j$ prices her good at $\sigma_j$, her revenue is at least $\rho_j$.
+The following lemma proves that these parameters always exist.
+
+\begin{restatable}{lemma}{thmSecurity}
+\label{thm:security}
+For any seller $j \in [m]$, there exist constants $\rho_j > 0$ and $\sigma_j \ge \rho_j/\nu$ such that
+for any response $\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m]\setminus\{j\}}$ by the other sellers
+and any allocation $\xvec \in \Dem((\sigma_j, \qvec_{-j}))$, we have
+$R_j((\sigma_j, \qvec_{-j}), \xvec) \ge \rho_j$.
+\end{restatable}
+\begin{proof}[Proof sketch]
+Intuitively, if seller $j$ sets a sufficiently small price for her good,
+then every other seller falls into two categories:
+\begin{tightenum}
+\item \emph{cheap sellers}: these sellers also have a sufficiently low price,
+    so they can extract only a small amount of revenue from the buyers,
+    which leaves some budget for $j$.
+\item \emph{expensive sellers}: these sellers charge a high price, so buyers prefer $j$ to these sellers.
+\end{tightenum}
+Thus, seller $j$ is guaranteed a minimum revenue.
+We defer the full proof to \cref{sec:exist-extra:market-params}.
+\end{proof}
+
+\paragraph{Overpricing Parameter.}
+Next, we study the \emph{overpricing parameter} $L_j$ for each seller $j$.
+If the other sellers are trying to extract all budget $B$,
+and if seller $j$ prices her good more than $L_j$, then she earns almost nothing.
+
+\begin{restatable}{lemma}{thmOverpricing}
+\label{thm:overpricing}
+For any seller $j \in [m]$, define $\sigma_j$ and $\rho_j$ as in \cref{thm:security}.
+Then there exists a constant $L_j \ge \max(B, \sigma_j)$ such that
+for any prices $\qvec \in \mathbb{R}_{\ge 0}^m$ and allocation $\xvec \in \Dem(\qvec)$, we have
+\[ q_j > L_j \text{ and } \max_{k \in [m] \setminus \{j\}} q_k = B
+    \implies R_j(\qvec, \xvec) \le \frac{\rho_j}{2\kappa}. \]
+\end{restatable}
+\begin{proof}[Proof sketch]
+Intuitively, if seller $j$'s price is too high, buyers will prefer the other sellers,
+and since their prices are large enough to extract almost all buyer budget,
+they will do so, leaving almost nothing for seller $j$.
+We defer the full proof to \cref{sec:exist-extra:market-params}.
+\end{proof}
+
+The security parameters and the overpricing parameters together show
+why it doesn't make sense to price too high:
+seller $j$ can earn $\rho_j$ by pricing at $\sigma_j$,
+but if she deviates to a price $q_j > L_j$,
+then for some response $\qvec_{-j}$, she earns $\rho_j/(2\kappa) < \rho_j$.
+It remains to show that such a response $\qvec_{-j}$ can be individually rational,
+which we show in \cref{thm:large-dev-deter} using \cref{thm:general-inner-kkm},
+which in turn uses KKM.
+
+\begin{lemma}
+\label{thm:large-dev-deter}
+Let $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be a continuous allocation rule.
+Define $(L_j)_{j \in [m]}$ as in \cref{thm:overpricing}.
+%
+Let $\pvec \in \beta\Delta_m$ be a price vector and $j \in [m]$ be a seller such that $p_j \ge \beta\rho_j/B$.
+For every deviation $q_j > L_j$ by seller $j$, there exists a response
+$\qvec_{-j} \in \prod_{k \neq j} [p_k, B]$ such that
+\begin{tightenum}
+\item ($j$ loses) $R^A_j(\qvec) < \nu p_j$.
+\item (others gain) $R^A_k(\qvec) \ge \nu p_k$ for all $k \in [m] \setminus \{j\}$.
+\end{tightenum}
+\end{lemma}
+\begin{proof}
+Since $p_j > 0$, for all $k \in [m] \setminus \{j\}$, we get $p_k \le \beta - p_j < B$. Let
+\[ U \defeq \bigg\{\qvec \in \{q_j\} \times \!\!\!\!\! \prod_{k \in [m] \setminus \{j\}} \!\!\! [p_k, B]:
+    \max_{k \in [m] \setminus \{j\}} q_k = B\bigg\}. \]
+For all $k \in [m] \setminus \{j\}$, define the gain function $g_k(\qvec) \defeq R_k(\qvec) - \nu p_k$.
+Then $g_k$ is continuous.
+If $q_k = p_k$ for some $k \in [m] \setminus \{j\}$, we have $R_k(\qvec) \le \nu p_k$, so $g_k(\qvec) \le 0$.
+
+By \cref{thm:overpricing} (overpricing), for any $\qvec \in U$,
+we get $R_j(\qvec) \le \rho_j/(2\kappa)$.
+Also, $p_j \ge \beta\rho_j/B = \rho_j/(\kappa\nu)$.
+Hence, $R_j(\qvec) \le \nu p_j / 2 < \nu p_j$.
+
+Since $R_{\all}$ is monotonic in prices (\cref{thm:rall-mono}),
+we get $R_{\all}(\qvec) \ge R_{\all}(\pvec) = \nu\beta$. Thus,
+\[ \sum_{k \in [m] \setminus \{j\}} R_k(\qvec) = R_{\all}(\qvec) - R_j(\qvec)
+    > \nu\beta - \nu p_j = \sum_{k \in [m] \setminus \{j\}} \nu p_k. \]
+Hence, $\sum_{k \in [m] \setminus \{j\}} g_k(\qvec) > 0$.
+%
+Thus, we can apply \cref{thm:general-inner-kkm}.
+This gives us $\qvec \in U$ such that $g_k(\qvec) \ge 0$ for all $k \in [m] \setminus \{j\}$,
+i.e., $R_k(\qvec) \ge \nu p_k$.
+\end{proof}
+
+\subsection{RARE for Continuous Allocation Rules}
+\label{sec:exist:continuous}
+
+We are now ready to formally prove our main result:
+the existence of a $\kappa$-RARE price vector
+when the allocation rule is continuous.
+In fact, we show something stronger:
+\begin{tightenum}
+\item We show that the sellers together extract a $1/\kappa$ fraction of the total buyer budget.
+\item We show that the $\kappa$-RARE price vector $\pvec$ lies in the simplex $\beta\Delta_m$,
+    and show a positive lower bound on each coordinate.
+\item We show that the response $\qvec_{-j}$ to seller $j$'s deviation
+    lies in the box $\prod_{k \neq j} [p_k, L_k]$.
+\end{tightenum}
+Note that we do not require the utilities to be concave.
+
+\begin{theorem}
+\label{thm:rare-exists-continuous}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance
+and $A: \mathbb{R}_{\ge 0}^m \to [0, 1]^{n \times m}$ be a continuous allocation rule.
+Define parameters $(\rho_j)_{j=1}^m$ and $(L_j)_{j=1}^m$ as in \cref{sec:exist:overpricing}.
+%
+Then there exists a price vector $\pvec$ in the truncated simplex
+$\{\yvec \in \beta\Delta_m: y_j \ge \beta\rho_j/B \text{ for all } j \in [m]\}$
+such that for every seller $j \in [m]$ and every deviation $q_j \in \mathbb{R}_{\ge 0}$ by seller $j$,
+there exists a response $\qvec_{-j} \in \prod_{k \in [m]\setminus\{j\}} [p_k, L_k]$ such that
+\begin{tightenum}
+\item (deviator $j$ doesn't gain much) $R_j^A(\qvec) \le \kappa \cdot \nu p_j = \kappa \cdot R_j^A(\pvec)$.
+\item (responder $k$ doesn't lose) $R_k^A(\qvec) \ge \nu p_k \ge R_k^A((q_j, \pvec_{-j}))$
+    for every seller $k \in [m] \setminus \{j\}$.
+\end{tightenum}
+\end{theorem}
+\begin{proof}
+Let $\pvec \in \beta\Delta_m$ be the prices obtained from
+the double KKM argument (\cref{thm:rare-exists-continuous-2}).
+Fix a seller $j \in [m]$. We first show that $p_j \ge \beta\rho_j/B$.
+
+Suppose $p_j < \beta\rho_j/B$. Recall from \cref{thm:security} that $\rho_j/\nu \le \sigma_j$. Then
+\[ p_j < \frac{\beta\rho_j}{B} = \frac{\rho_j}{\kappa\nu} \le \frac{\rho_j}{\nu} \le \sigma_j. \]
+Let $q_j \defeq \sigma_j$. Since $q_j \in [p_j, L_j]$, by \cref{thm:rare-exists-continuous-2},
+there exists a response $\qvec_{-j} \in \prod_{k \neq j} [p_k, L_k]$ such that
+\[ R_j(\qvec) = \frac{p_j}{\beta} R_{\all}(\qvec) \le \frac{p_j}{\beta} B. \]
+By \cref{thm:security} (security), we get $R_j(\qvec) \ge \rho_j$. Thus
+\[ \rho_j \le \frac{p_j}{\beta} B \implies p_j \ge \frac{\beta\rho_j}{B}, \]
+which is a contradiction. Hence, we have $p_j \ge \beta\rho_j/B$.
+
+Now we show that there always exists a response $\qvec_{-j}$ satisfying the requirements of this theorem.
+There are three cases, depending on the value of $q_j$.
+
+\textbf{Case 1}: $q_j \in [p_j, L_j]$.
+\\ Then by \cref{thm:rare-exists-continuous-2}, we get that there exists a response
+$\qvec_{-j} \in \prod_{k \neq j} [p_k, L_k]$ such that for every $k \in [m]$, we have
+\[ R_k(\qvec) = \frac{p_k}{\beta} R_{\all}(\qvec). \]
+Thus,
+\[ R_j(\qvec) = \frac{p_j}{\beta} R_{\all}(\qvec) \le \nu p_j \frac{B}{\nu\beta} = \kappa \nu p_j, \]
+and for any $k \in [m] \setminus \{j\}$, using \cref{thm:rall-mono}, we have
+\[ R_k(\qvec) = \frac{p_k}{\beta} R_{\all}(\qvec) \ge \frac{p_k}{\beta} R_{\all}(\pvec) = \nu p_k. \]
+By \cref{thm:accounting}, we get $R_j(\pvec) = \nu p_j$ and $R_k((q_j, \pvec_{-j})) \le \nu p_k$.
+Thus, $\qvec_{-j}$ satisfies the requirements of this theorem.
+
+\textbf{Case 2}: $q_j < p_j$.
+\\ Let $\qvec_{-j} \defeq \pvec_{-j}$. By \cref{thm:accounting}, we get
+$R_j(\qvec) = \nu q_j < \nu p_j$ and for all $k \in [m] \setminus \{j\}$,
+we get $R_k(\qvec) = \nu q_k = \nu p_k = R_k((q_j, \pvec_{-j}))$.
+Thus, $\qvec_{-j}$ satisfies the requirements of this theorem.
+
+\textbf{Case 3}: $q_j > L_j$.
+\\ \Cref{thm:large-dev-deter} gives us a response $\qvec_{-j} \in \prod_{k \neq j} [p_k, B]$
+such that $R_j(\qvec) \le \nu p_j$ and $R_k(\qvec) \ge \nu p_k$ for all $k \in [m] \setminus \{j\}$.
+By \cref{thm:accounting}, we get $R_j(\pvec) = \nu p_j$ and $R_k((q_j, \pvec_{-j})) \le \nu p_k$.
+Thus, $\qvec_{-j}$ satisfies the requirements of this theorem.
+\end{proof}
+
+\Cref{thm:rare-exists-continuous} implies the following simple corollary.
+
+\begin{corollary}
+\label{thm:rare-exists-continuous-corr}
+For any market $\Ical$ and continuous allocation rule $A$,
+there exists a $\kappa$-RARE price vector $\pvec$
+at which the sellers' total revenue is $R_{\all}(\pvec) = B/\kappa$,
+where $\kappa = 1$ in the rivalrous setting and
+$\kappa = b_{\avg}/b_{\min}$ in the non-rivalrous setting.
+\end{corollary}
+\begin{proof}
+\Cref{thm:rare-exists-continuous} gives us the $\kappa$-RARE price vector $\pvec \in \beta\Delta_m$.
+By \cref{thm:accounting}, we get $R_{\all}(\pvec) = \nu\sum_{j=1}^m p_j = \nu\beta = B/\kappa$.
+\end{proof}
+
+\subsection{RARE for Non-Rivalrous Goods}
+\label{sec:exist:non-rival}
+
+In non-rivalrous markets, when the utility functions are strictly concave,
+the demand set is a singleton, so there is a unique allocation rule.
+Moreover, one can prove that such an allocation rule is continuous.
+We defer the full proof to \cref{sec:exist-extra:non-rival}.
+
+\begin{restatable}{theorem}{thmUniqueNrDemand}
+\label{thm:unique-nr-demand}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+Let $u_i$ be strictly concave for all $i \in [n]$.
+Then for all prices $\pvec \in \mathbb{R}_{\ge 0}^m$,
+the non-rivalrous demand $\DemNR(\pvec)$ is a singleton.
+Moreover, the unique allocation rule $A$ is continuous.
+\end{restatable}
+
+Applying \cref{thm:rare-exists-continuous-corr} then shows that for strictly
+concave utilities, a $(b_{\avg}/b_{\min})$-RARE always exists.
+On the other hand, for linear utility functions,
+there are instances where every allocation rule is discontinuous.
+
+\begin{example}
+\label{ex:lin-util-dem-discont}
+Let there be two goods,
+and a single buyer with budget 1 and utility function $u_1(\xvec) = x_1 + x_2$.
+Let $\pvec \in (0, 1)^2$ be a price vector such that $p_1 + p_2 > 1$.
+If $p_1 < p_2$, then $\Dem_1(\pvec) = \{(1, \frac{1-p_1}{p_2})\}$.
+If $p_1 > p_2$, then $\Dem_1(\pvec) = \{(\frac{1-p_2}{p_1}, 1)\}$.
+Thus, for any $\eps \in (0, 1/3)$, we have $\Dem_1((2/3-\eps, 2/3+\eps)) = \{(1, (1+3\eps)/(2+3\eps))\}$
+and $\Dem_1((2/3+\eps, 2/3-\eps)) = \{((1+3\eps)/(2+3\eps), 1)\}$.
+Thus, $\Dem_1$ is discontinuous.
+\end{example}
+
+However, we can still show that approximate RARE exists by adding
+an infinitesimally small concave perturbation to the utilities.
+We use $\vecOne$ to denote the allocation where every good is allocated to every buyer.
+
+\begin{theorem}[\texorpdfstring{$(b_{\avg}/b_{\min})$}{(bavg/bmin)}-RARE for non-rivalrous markets]
+\label{thm:nonrival-rare-exists}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a non-rivalrous market instance.
+Suppose each utility $u_i: [0,1]^m \to \mathbb{R}_{\ge 0}$ is concave.
+Let $\kappa \defeq b_{\avg}/b_{\min}$.
+%
+Then there exist prices $\pvec \in b_{\min}\Delta_m^{\circ}$ such that $\vecOne \in \DemNR(\pvec)$ and
+for every seller $j \in [m]$ and deviation price $q_j \in \mathbb{R}_{\ge 0}$,
+there exists a response $\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m]\setminus\{j\}}$ and allocation $\xvec \in \DemNR(\qvec)$
+(where $\qvec \defeq (q_j, \qvec_{-j})$) such that:
+\begin{tightenum}
+\item Seller $j$'s revenue after the response is at most $\kappa$ times her original revenue, i.e.,
+    $R_j(\qvec, \xvec) \le \kappa \cdot R_j(\pvec, \vecOne) = \kappa \cdot n p_j$.
+\item No responder loses by responding, i.e., $R_k(\qvec, \xvec) \ge n p_k$
+    for every responder $k \in [m] \setminus \{j\}$.
+\end{tightenum}
+\end{theorem}
+\begin{proof}
+For every $\eps \in [0, 1]$, define the perturbed instance
+$\Ical^{(\eps)} \defeq ([n], [m], (u_i^{(\eps)})_{i=1}^n, (b_i)_{i=1}^n)$, where
+\[ u_i^{(\eps)}(\xvec) \defeq u_i(\xvec) + \eps \sum_{k=1}^m x_k(2-x_k). \]
+One can show that the parameters $\rho_j > 0$, $\sigma_j \ge \rho_j/\nu$,
+and $L_j \ge \max(B, \sigma_j)$ can be picked to be independent of the perturbation.
+See \cref{thm:robust-params} in \cref{sec:exist-extra:market-params}.
+
+For $\eps_t = 1/t$, for each $t \in \N$ and each $i \in [n]$,
+the utility function $u_i^{(\eps_t)}$ is strictly concave.
+Hence, by \cref{thm:unique-nr-demand}, there is a unique continuous allocation rule
+$A^{(\eps_t)}$ for each instance $\Ical^{(\eps_t)}$.
+Apply \cref{thm:rare-exists-continuous} to obtain $\pvec^{(t)} \in b_{\min}\Delta_m$
+and $p^{(t)}_j \ge b_{\min}\rho_j/B$.
+
+By compactness, pass to a subsequence along which $\pvec^{(t)} \to \pvec \in b_{\min}\Delta_m$.
+Relabel this subsequence and its corresponding perturbations using the same notation;
+we still have $\eps_t \to 0$.
+Fix this price subsequence before choosing a seller or deviation.
+By the uniform lower bound, we get $p_j \ge b_{\min}\rho_j/B > 0$ for all $j \in [m]$.
+Hence, every buyer can buy all the goods, so $\vecOne \in \DemNR(\pvec; \Ical)$.
+
+Fix a seller $j \in [m]$ and deviation $q_j$. By \cref{thm:rare-exists-continuous},
+we get a response $\qvec_{-j}^{(t)}$ in each instance $\Ical^{(\eps_t)}$ such that
+$q^{(t)}_k \in [p_k^{(t)}, L_k]$ for all $k \in [m] \setminus \{j\}$.
+Moreover, let $\xvec^{(t)} \defeq A^{(\eps_t)}(\qvec^{(t)})$ be the
+unique element in $\DemNR(\qvec^{(t)}; \Ical^{(\eps_t)})$.
+\Cref{thm:rare-exists-continuous} also guarantees
+$R_j(\qvec^{(t)}, \xvec^{(t)}) \le \kappa n p_j^{(t)}$
+and $R_k(\qvec^{(t)}, \xvec^{(t)}) \ge n p_k^{(t)}$ for all $k \in [m] \setminus \{j\}$.
+
+The pairs $(\qvec_{-j}^{(t)}, \xvec^{(t)})$ lie in the compact set
+\[ \bigg(\prod_{k \neq j} [0, L_k]\bigg) \times [0, 1]^{n \times m}. \]
+Thus, there is a further subsequence along which
+$(\qvec_{-j}^{(t)}, \xvec^{(t)}) \to (\qvec_{-j}, \xvec)$.
+Along this same subsequence, $\pvec^{(t)} \to \pvec$ and $\eps_t \to 0$ still hold.
+This further subsequence may depend on $j$ and $q_j$.
+Let $\qvec \defeq (q_j, \qvec_{-j})$; since the deviation price is fixed, $\qvec^{(t)} \to \qvec$.
+Then $\qvec_{-j} \in \prod_{k \neq j} [p_k, L_k]$, and by \cref{thm:demand-limit}, we get $\xvec \in \DemNR(\qvec; \Ical)$.
+By the continuity of $R_j(\cdot, \cdot)$, we get $R_j(\qvec, \xvec) \le \kappa n p_j$
+and $R_k(\qvec, \xvec) \ge n p_k$ for all $k \in [m] \setminus \{j\}$.
+\end{proof}
+
+\subsection{RARE for Rivalrous Goods}
+\label{sec:exist:rival}
+
+For non-rivalrous goods, strictly concave utilities determine a unique allocation rule.
+For merely concave utilities, \cref{thm:nonrival-rare-exists} gives a $\kappa$-RARE guarantee
+without a fixed allocation rule: a demand allocation can be chosen for each response.
+
+For rivalrous goods, the demand set can contain multiple allocations even with strictly concave utilities.
+E.g., if there are two buyers and two goods, priced such that no buyer can afford either good completely,
+then the demand set $\DemR(\pvec)$ can have very different allocations.
+We restrict the choice of allocation by maximizing a fixed \emph{welfare function}.
+When its maximizer is unique at every price vector, this determines an allocation rule.
+
+\begin{definition}[\texorpdfstring{$W$}{W}-rivalrous demand]
+Let $W: \mathbb{R}_{\ge 0}^n \to \mathbb{R}$ be a continuous
+and strictly monotone function, which we call the \emph{welfare function}.
+Define the $W$-rivalrous demand at prices $\pvec \in \mathbb{R}_{\ge 0}^m$ as
+\[ \Dem^W(\pvec) \defeq \argmax_{\xvec \in \AffR(\pvec)} W(u_1(\xvec_1), \ldots, u_n(\xvec_n)). \]
+(The argmax is well-defined: since $W$ is continuous and $\AffR(\pvec)$ is a compact set, a maximum always exists.)
+\end{definition}
+
+Recall that $\AffR(\pvec)$ is the set of allocations where each buyer can afford her bundle.
+Since $W$ is strictly monotone, the maximizer allocation $\xvec$ is buyer-PO, so $\Dem^W(\pvec) \subseteq \DemR(\pvec)$.
+
+\Cref{ex:lin-util-dem-discont} shows that in a market with two sellers and one buyer
+with linear utilities, every allocation rule can be discontinuous.
+Thus, we study strictly concave utility functions.
+For such utilities, when $W$ is concave, then $\Dem^W(\pvec)$ is a singleton
+and the corresponding unique allocation rule is continuous.
+We defer the full proof to \cref{sec:exist-extra:rival}.
+
+\begin{restatable}{theorem}{thmUniqueRivalDemand}
+\label{thm:unique-rival-demand}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+Let $u_i$ be strictly concave for all $i \in [n]$.
+Let $W: \mathbb{R}_{\ge 0}^n \to \mathbb{R}$ be a continuous, strictly monotone, concave function.
+Then for all prices $\pvec \in \mathbb{R}_{\ge 0}^m$,
+the $W$-rivalrous demand $\Dem^W(\pvec)$ is a singleton.
+Moreover, the unique allocation rule $A$ is continuous.
+\end{restatable}
+
+We give several examples of concave welfare functions:
+\begin{enumerate}
+\item \textbf{Utilitarian social welfare}: Set $W(\xvec) = \sum_{i=1}^n x_i$.
+\item \textbf{Weighted social welfare}: Set $W(\xvec) \defeq \wvec^T\xvec$, where $\wvec \in \mathbb{R}_{>0}^n$.
+\item \textbf{Priority order}:
+    Set $W(\xvec) \defeq \wvec^T\xvec$, where $w_i \defeq M^{-i}$ for each buyer $i \in [n]$
+    and $M$ is a very large number. This approximates the requirement that we give the maximum
+    possible utility to buyer 1, then the maximum possible utility to buyer 2, and so on.
+    We can renumber the buyers \wLoG{} to accommodate any priority order.
+\item \textbf{Weighted Nash Social Welfare}: For a very small $\eps > 0$ and $\wvec \in \Delta_n^{\circ}$,
+    \[ W(\xvec) \defeq \prod_{i=1}^n x_i^{w_i} + \eps \sum_{i=1}^n x_i, \]
+    gives an approximation to the Weighted Nash Social Welfare.
+    Adding $\eps$ times the utilitarian social welfare ensures that $W$ is strictly monotone.
+\item \textbf{Leximin Welfare}: For $0 < \eps \ll 1$,
+    \[ W(\xvec) \defeq \sum_{i=1}^n \eps^{i-1} x_{[i]}, \]
+    where $x_{[i]}$ is the $i\Th$ smallest coordinate in $\xvec$,
+    gives an approximation to the Leximin Welfare.
+\end{enumerate}
+For all of the above welfare functions, there is a corresponding unique allocation rule
+(when utilities are strictly concave) which is continuous.
+For that allocation rule, a RARE always exists by \cref{thm:rare-exists-continuous-corr}.
+
+When utilities are merely concave, $\Dem^W(\pvec)$ may contain several allocations,
+so fixing $W$ need not determine a unique allocation rule.
+The following theorem gives a version of RARE without a fixed allocation rule.
+It fixes $W$ and the initial allocation $\xvec$, and allows a welfare-maximizing allocation $\zvec$
+to be chosen separately for each seller's deviation and response.
+We obtain this guarantee by perturbing the utilities to make them strictly concave and taking a limit.
+The proof is similar to \cref{thm:nonrival-rare-exists},
+so we defer the full proof to \cref{sec:exist-extra:rival}.
+
+\begin{restatable}{theorem}{thmRivalRareExists}
+\label{thm:rival-rare-exists}
+Let $\Ical = ([n], [m], (u_i)_{i=1}^n, (b_i)_{i=1}^n)$ be a market instance.
+Suppose each utility $u_i: [0,1]^m \to \mathbb{R}_{\ge 0}$ is concave.
+Fix a continuous, strictly monotone, concave function $W: \mathbb{R}_{\ge 0}^n \to \mathbb{R}$.
+Then there exist prices $\pvec \in B\Delta_m^{\circ}$ and an allocation $\xvec \in \Dem^W(\pvec)$
+such that for every seller $j \in [m]$ and deviation price $q_j \in \mathbb{R}_{\ge 0}$,
+there exists a response $\qvec_{-j} \in \mathbb{R}_{\ge 0}^{[m]\setminus\{j\}}$ and allocation $\zvec \in \Dem^W(\qvec)$
+(where $\qvec \defeq (q_j, \qvec_{-j})$) such that:
+\begin{tightenum}
+\item $j$'s revenue after the response is at most her original revenue, i.e.,
+    $R_j(\qvec, \zvec) \le R_j(\pvec, \xvec) = p_j$.
+\item No responder loses by responding, i.e., $R_k(\qvec, \zvec) \ge p_k$
+    for every responder $k \in [m] \setminus \{j\}$.
+\end{tightenum}
+\end{restatable}

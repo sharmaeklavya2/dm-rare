@@ -1,0 +1,377 @@
+\section{Nash Equilibria are Uncommon}
+\label{sec:nasheq-uncommon}
+
+\subsection{Non-Rivalrous Goods}
+\label{sec:nasheq-uncommon:non-rival}
+
+\begin{theorem}[Nash equilibria are uncommon]
+\label{thm:nasheq-uncommon}
+Let $\Ical$ be a market with 2 non-rivalrous goods and $n$ buyers, where each buyer $i \in [n]$
+has budget 1 and linear utility, with $u_{i,j} \in [1, 2)$ for each good $j \in [2]$.
+Fix an allocation rule $A$. Then a Nash equilibrium exists iff all utility ratios are the same, i.e.,
+\[ \frac{u_{1,1}}{u_{1,2}} = \frac{u_{2,1}}{u_{2,2}} = \cdots = \frac{u_{n,1}}{u_{n,2}}. \]
+\end{theorem}
+\begin{proof}
+For $i \in [n]$, let $\lambda_i \defeq u_{i,1} / u_{i,2}$ be buyer $i$'s utility ratio.
+We suppress the superscript $A$ in the revenue functions throughout the proof.
+\WLoG, let $\lambda_1 \le \ldots \le \lambda_n$.
+Since $u_{i,j} \in [1, 2)$ for all $i$ and $j$, we get $1 / 2 < \lambda_1$ and $\lambda_n < 2$.
+
+We now show how the ratio of prices affects which buyers prefer which good.
+At any prices $(q_1, q_2)$, if $q_1 < q_2 \lambda_k$, then for any $i$,
+\[ \frac{q_1}{u_{i,1}} \cdot \frac{u_{i,2}}{q_2} = \frac{1}{\lambda_i} \cdot \frac{q_1}{q_2} < \frac{\lambda_k}{\lambda_i}. \]
+Thus, buyers $\{k, \ldots, n\}$ strictly prefer good 1 over 2.
+Conversely, if $q_1 > q_2 \lambda_k$, then for any $i$,
+\[ \frac{u_{i,1}}{q_1} \cdot \frac{q_2}{u_{i,2}} = \lambda_i \cdot \frac{q_2}{q_1} < \frac{\lambda_i}{\lambda_k}, \]
+so buyers $[k]$ strictly prefer good 2 over 1.
+
+\paragraph{Nash equilibrium exists for equal utility ratios.}
+Suppose $\lambda_i = \alpha$ for all $i \in [n]$.
+Let $p_1 = \alpha / (1 + \alpha)$ and $p_2 = 1 / (\alpha + 1)$.
+Then all buyers buy both goods fully, and we get $R_j(p_1, p_2) = n p_j$.
+
+Suppose seller 1 has an improving deviation $q_1$, i.e., $R_1(q_1, p_2) > n p_1$.
+Since $R_1(q_1, p_2) \le n q_1$, we get $q_1 > p_1 = \lambda_n p_2$.
+Thus, all buyers strictly prefer good 2 over 1 at prices $(q_1, p_2)$,
+so $R_1(q_1, p_2) = n (1 - p_2) = n p_1$, which is a contradiction.
+Hence, seller 1 does not have an improving deviation.
+
+Suppose seller 2 has an improving deviation $q_2$, i.e., $R_2(p_1, q_2) > n p_2$.
+Since $R_2(p_1, q_2) \le n q_2$, we get $q_2 > p_2 = p_1 / \lambda_1$.
+Thus, all buyers strictly prefer good 1 over 2 at prices $(p_1, q_2)$,
+so $R_2(p_1, q_2) = n (1 - p_1) = n p_2$, which is a contradiction.
+Hence, seller 2 does not have an improving deviation,
+which implies that $(p_1, p_2)$ is a Nash equilibrium.
+
+\paragraph{Nash equilibrium does not exist for unequal utility ratios.}
+Assume $\lambda_1 < \lambda_n$. Let $(p_1, p_2)$ be a Nash equilibrium.
+We will derive a contradiction.
+
+Suppose $p_1 + p_2 < 1$. Then $R_1(1 - p_2, p_2) = n (1 - p_2) > n p_1 = R_1(p_1, p_2)$, which is a contradiction.
+Hence, we have $p_1 + p_2 \ge 1$.
+
+\paragraph{Both prices and both revenues are positive.}
+If $p_j = 0$ for some seller $j$, the other seller $\ell$ has price $p_\ell \ge 1$.
+Seller $j$ can choose
+\[ 0 < q_j < \min\bigg\{1, p_\ell \min_{i \in [n]} \frac{u_{i,j}}{u_{i,\ell}}\bigg\}. \]
+Every buyer then strictly prefers good $j$ and buys it fully,
+giving seller $j$ positive revenue instead of zero, a contradiction.
+Thus, both prices are positive. The same deviation now shows that both sellers' equilibrium revenues are positive.
+
+\paragraph{The sum of prices exceeds the budget.}
+Suppose $p_1 + p_2 = 1$. Every buyer buys both goods fully, so $R_j(p_1, p_2) = n p_j$.
+If $p_1 / p_2 < \lambda_n$, choose
+\[ p_1 < q_1 < \min\{1, \lambda_n p_2\}. \]
+Buyer $n$ still strictly prefers good 1 and pays $q_1$ to seller 1.
+Every other buyer pays seller 1 at least $1 - p_2 = p_1$:
+her budget is exhausted, and her payment to seller 2 is at most $p_2$.
+Hence, $R_1(q_1, p_2) \ge q_1 + (n - 1) p_1 > n p_1$, a contradiction.
+Otherwise, $p_1 / p_2 \ge \lambda_n > \lambda_1$.
+Choose $p_2 < q_2 < \min\{1, p_1 / \lambda_1\}$.
+Buyer 1 still strictly prefers good 2, and the symmetric argument gives
+$R_2(p_1, q_2) \ge q_2 + (n - 1) p_2 > n p_2$, again a contradiction.
+Thus, $p_1 + p_2 > 1$.
+
+\paragraph{No buyer has equal bang per buck for the two goods.}
+Suppose $p_1 / p_2 = \lambda_k$ for some buyer $k$.
+Let $c_j$ be buyer $k$'s payment to seller $j$ under $A$ at $(p_1, p_2)$.
+Since her budget is exhausted,
+\[ c_1 + c_2 = 1 < \min\{1, p_1\} + \min\{1, p_2\}. \]
+Thus, some seller $j$ satisfies $g \defeq \min\{1, p_j\} - c_j > 0$.
+Let $\ell$ be the other seller, and decrease $p_j$ to $p_j - \delta$,
+where
+\[ 0 < \delta < \min\{p_j, p_1 + p_2 - 1, g / n\}. \]
+Choose $\delta$ small enough that every buyer with a strict bang-per-buck ordering
+at the original prices retains that ordering; there are only finitely many buyers.
+Buyer $k$ now strictly prefers good $j$, so her payment to seller $j$ becomes
+$\min\{1, p_j - \delta\}$, an increase of at least $g - \delta$.
+For any other buyer who originally strictly preferred good $j$, her payment changes
+from $\min\{1, p_j\}$ to $\min\{1, p_j - \delta\}$, a decrease of at most $\delta$.
+For a buyer who originally strictly preferred good $\ell$, her payment to seller $j$
+remains $\max\{1 - p_\ell, 0\}$.
+Finally, any other originally indifferent buyer now strictly prefers good $j$;
+her old payment was at most $\min\{1, p_j\}$, so her payment decreases by at most $\delta$.
+These statements hold for any allocation rule $A$.
+Seller $j$'s revenue therefore increases by at least $g - n \delta > 0$, a contradiction.
+Hence, $p_1 / p_2 \neq \lambda_i$ for every buyer $i$.
+
+\paragraph{Both prices are at least the budget.}
+A seller $j$ with $p_j < 1$ cannot be strictly preferred by any buyer:
+otherwise, she could increase her price slightly while keeping it below 1
+and preserving every buyer's strict bang-per-buck ordering.
+Each buyer who prefers good $j$ would pay the increased price,
+and every other buyer's payment to seller $j$ would remain $\max\{1 - p_\ell, 0\}$,
+where $\ell$ is the other seller. This would be an improving deviation.
+Now suppose $p_j < 1$. Since there are no ties, every buyer strictly prefers good $\ell$.
+If $p_\ell < 1$, seller $\ell$ has an improving deviation by the same argument.
+If $p_\ell\ge1$, every buyer spends her entire budget on good $\ell$,
+leaving seller $j$ zero revenue, which we have already ruled out.
+Thus, $p_1, p_2\ge1$.
+
+\paragraph{The lower-revenue seller can profitably attract every buyer.}
+The total revenue is $n$, so some seller $j$ has $R_j(p_1, p_2) \le n / 2$.
+Let $\ell$ be the other seller. Since $u_{i,j} / u_{i,\ell} > 1 / 2$ for every buyer,
+we can choose
+\[ \frac12 < q_j < \min\bigg\{1, \min_{i \in [n]} \frac{u_{i,j}}{u_{i,\ell}}\bigg\}. \]
+Since $p_\ell\ge1$, we have
+\[ \frac{q_j}{u_{i,j}} < \frac{1}{u_{i,\ell}} \le \frac{p_\ell}{u_{i,\ell}}
+\qquad \text{for every }i \in [n]. \]
+Every buyer therefore strictly prefers good $j$ and buys it fully, giving
+\[ R_j((q_j, \pvec_{-j})) = n q_j > n / 2 \ge R_j(p_1, p_2), \]
+where $\pvec = (p_1, p_2)$.
+This contradicts Nash equilibrium and completes the proof.
+\end{proof}
+
+\subsection{Non-Rivalrous Linear Utility to Rivalrous SPLC Utility}
+\label{sec:lin-nonrival-to-splc-rival}
+
+In \cref{sec:nasheq-uncommon:non-rival}, we proved that Nash equilibria are uncommon
+in a large family of non-rivalrous markets. Now we extend this result to rivalrous markets,
+by reducing the non-rivalrous markets to rivalrous markets.
+
+Let $\Ical$ be a market where buyers have equal budgets and linear utilities over non-rivalrous goods.
+We show how to construct a market $\Icalhat$ where buyers have
+SPLC (separable piecewise-linear concave) utilities over rivalrous goods
+such that $\pvec$ is a Nash equilibrium for $\Icalhat$ iff $\pvec/n$ is a Nash equilibrium for $\Ical$.
+
+\begin{lemma}
+\label{thm:rivalize-1}
+Let $\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b)_{i=1}^n)$ be a market where each buyer $i \in [n]$
+has budget $b > 0$ and a linear utility function $u_i(\zvec) = \sum_{j=1}^m u_{i,j}z_j$.
+
+Let $u_{\min} \defeq \min_{i,j} u_{i,j}$, $u_{\max} \defeq \max_{i,j} u_{i,j}$, and $0 < \eps < u_{\min}^2/u_{\max}$.
+Define each buyer $i$'s new utility function $\uhat_i$ as
+\[ \uhat_i(\zvec)
+    = \sum_{j=1}^m \begin{cases}u_{i,j} \cdot nz_j & \text{ if } z_j \le 1/n
+        \\ u_{i,j} + \eps(nz_j - 1) & \text{ if } z_j > 1/n\end{cases}. \]
+Define the new market $\Icalhat \defeq ([n], [m], (\uhat_i)_{i=1}^n, (b)_{i=1}^n)$. Then
+\begin{enumerate}
+\item $\uhat_i$ is strictly increasing and SPLC for each buyer $i \in [n]$.
+\item For any prices $\pvec$, we have $\xvec \in \DemNR(\pvec; \Ical) \iff
+    (\xvec \in [0, 1]^{n \times m} \text{ and } \xvec/n \in \DemR(n\pvec; \Icalhat))$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Since $0 < \eps < u_{\min}^2/u_{\max} \le u_{\min}$, each component of $\uhat_i$
+is continuous and has slope $nu_{i,j}$ before $1/n$ and slope $n\eps$ afterward.
+These slopes are positive and non-increasing, so $\uhat_i$ is strictly increasing and SPLC.
+
+We first prove the forward implication. Fix arbitrary prices $\pvec \in \mathbb{R}_{\ge 0}^m$
+and an allocation $\xvec \in \DemNR(\pvec; \Ical)$.
+Then $\xvec \in [0,1]^{n \times m}$, and $\xvec/n$ satisfies
+\[ \sum_{i=1}^n \frac{x_{i,j}}{n} \le \sum_{i=1}^n \frac{1}{n} = 1 \quad\text{for every }j,
+    \qquad (n\pvec)^T\frac{\xvec_i}{n} = \pvec^T\xvec_i \le b \quad\text{for every }i. \]
+Thus, $\xvec/n \in \AffR(n\pvec; \Icalhat)$.
+We will prove its Pareto optimality by showing that it maximizes a positively weighted sum
+of the utilities $\uhat_i$ over $\AffR(n\pvec; \Icalhat)$.
+
+For $t \in [0,n]$, define
+\[ f_{i,j}(t) \defeq u_{i,j}\min(t,1) + \eps\max(t-1,0). \]
+Then $\uhat_i(\yvec_i)=\sum_j f_{i,j}(ny_{i,j})$ for every bundle $\yvec_i \in [0,1]^m$.
+
+\paragraph{Case 1: The full bundle is affordable.}
+Suppose $\sum_j p_j \le b$. Then $x_{i,j} = 1$ for all $i,j$,
+since all utility coefficients are positive and $\xvec \in \DemNR(\pvec; \Ical)$.
+For every $t \in [0,n]$,
+\begin{align*}
+f_{i,j}(t) - f_{i,j}(1)
+&= u_{i,j}\min(t-1, 0) + \eps\max(t-1, 0)
+\\ &= \begin{cases}u_{i,j}(t-1) & \text{ if } t \le 1 \\ \eps(t-1) & \text{ if } t > 1\end{cases}
+\\ &\le u_{\min}(t-1),
+\end{align*}
+since $\eps \le u_{\min} \le u_{i,j}$ for all $i$ and $j$.
+Consequently, every $\yvec \in \AffR(n\pvec; \Icalhat)$ obeys
+\begin{align*}
+& \sum_{i=1}^n \uhat_i(\yvec_i) - \sum_{i=1}^n \uhat_i(\xvec_i/n)
+= \sum_{j=1}^m \sum_{i=1}^n (f_{i,j}(ny_{i,j}) - f_{i,j}(x_{i,j}))
+\\ &\le \sum_{j=1}^m \sum_{i=1}^n u_{\min}(ny_{i,j} - 1)
+= nu_{\min} \sum_{j=1}^m \bigg(\sum_{i=1}^n y_{i,j} - 1\bigg)
+\le 0.
+\end{align*}
+Thus $\xvec/n$ maximizes the unweighted sum of utilities over $\AffR(n\pvec;\Icalhat)$ in this case,
+so $\xvec/n \in \PO(\AffR(n\pvec; \Icalhat); \Icalhat) = \DemR(n\pvec; \Icalhat)$.
+
+\paragraph{Case 2: The full bundle is unaffordable.}
+Now suppose $\sum_j p_j > b$. Every buyer exhausts her budget at $\xvec$,
+and every zero-price good $j$ satisfies $x_{i,j} = 1$ for all buyers $i$.
+We will choose welfare weights using each buyer's bang-per-buck at the point where her budget is exhausted.
+
+Let $M^+ \defeq \{j \in [m]: p_j > 0\}$ be the set of positively-priced goods.
+Consider a buyer with utility coefficients $\vvec \in \mathbb{R}_{>0}^m$.
+She purchases all zero-price goods $[m] \setminus M^+$,
+and then positive-price goods from $M^+$ in decreasing order of $v_j/p_j$ till she spends $b$.
+Let $\tau(\vvec)$ be the bang-per-buck of the last good purchased.
+Formally, let $T(\vvec) \defeq \{v_j/p_j: j \in M^+\}$ be the set of bang-per-bucks, and
+\[ \tau(\vvec) \defeq \max\Bigg\{t \in T(\vvec): \!\!\!\! \sum_{j \in M^+:\, v_j/p_j \ge t} \!\!\!\! p_j \ge b\Bigg\}. \]
+The maximum selects the highest cutoff at which these goods still suffice to exhaust the budget.
+The set $T(\vvec)$ is finite and nonempty, and its smallest element satisfies the budget inequality because $\sum_j p_j>b$.
+Thus the maximum exists and is positive.
+This formula groups tied goods together, so the cutoff does not depend on their order of purchase.
+Zero-price goods are already purchased fully and do not enter this calculation.
+
+For each actual buyer $i \in [n]$, let $\lambda_i \defeq \tau((u_{i,j})_{j=1}^m)$.
+The goods strictly above her cutoff cost less than $b$,
+but including those at the cutoff cost at least $b$:
+\[ \sum_{j \in M^+:\, u_{i,j}/p_j > \lambda_i} \!\!\!\!\!\! p_j \; < \; b \;
+    \le \!\!\!\! \sum_{j \in M^+:\, u_{i,j}/p_j \ge \lambda_i} \!\!\!\!\!\! p_j. \]
+Thus every optimal bundle purchases all goods above the cutoff, none below it,
+and spends the remaining budget on goods at the cutoff.
+In particular, for all $j \in M^+$,
+\begin{equation}
+\label{eq:rivalize-cutoff}
+u_{i,j}/p_j > \lambda_i \implies x_{i,j} = 1,
+\qquad
+u_{i,j}/p_j < \lambda_i \implies x_{i,j} = 0.
+\end{equation}
+We also have $x_{i,j} = 1$ for all $j \in [m] \setminus M^+$.
+
+We use $1/\lambda_i$ as buyer $i$'s welfare weight.
+For her original linear utility, this normalization makes each good $j \in M^+$ at her cutoff,
+i.e., with $u_{i,j}/p_j=\lambda_i$, have marginal utility $u_{i,j}/\lambda_i=p_j$.
+This aligns the buyers' cutoff marginal utilities with the same price vector.
+Our goal is to prove that $\xvec/n$ maximizes
+$\sum_i \uhat_i(\yvec_i)/\lambda_i$ over $\yvec \in \AffR(n\pvec; \Icalhat)$.
+
+To control the positive utility slopes beyond the allotments, we first compare these weights across buyers.
+Let $\lambda_0\defeq\tau(\vecOne)$ be the cutoff for a hypothetical buyer
+who values one unit of every good equally and has the same budget $b$.
+Increasing utility coefficients cannot decrease $\tau$: the goods in $M^+$ counted at the old cutoff
+still cost at least $b$, and the smallest of their new bang-per-buck ratios
+is an admissible cutoff at least as large as the old one.
+Thus $\tau$ is coordinatewise non-decreasing.
+The coefficients of goods in $[m] \setminus M^+$ do not affect $\tau$.
+Also, multiplying all coefficients by $c>0$ multiplies all bang-per-buck ratios on $M^+$ by $c$,
+giving $\tau(c\vvec) = c\tau(\vvec)$.
+Since $u_{\min}\vecOne \le (u_{i,j})_{j=1}^m \le u_{\max}\vecOne$ coordinatewise, we obtain
+\[ u_{\min}\lambda_0 \le \lambda_i \le u_{\max}\lambda_0. \]
+Here the common budget is essential: all buyers' cutoffs are computed using the same function $\tau$.
+Writing $\lambda_{\min} \defeq \min_i\lambda_i$ and $\lambda_{\max} \defeq \max_i\lambda_i$, we have
+\[ \frac{\lambda_{\max}}{\lambda_{\min}} \le \frac{u_{\max}}{u_{\min}}. \]
+
+Recall that $f_{i,j}(t) \defeq u_{i,j}\min(t,1) + \eps\max(t-1,0)$.
+The normalized component $f_{i,j}/\lambda_i$ has slope $u_{i,j}/\lambda_i$ before $t=1$
+and slope $\eps/\lambda_i$ afterward.
+The bound on $\eps$ gives $\eps\lambda_{\max}/\lambda_{\min} < u_{\min}$.
+Thus the largest normalized slope after $t=1$ is smaller than every normalized slope before $t=1$:
+\begin{equation}
+\label{eq:rivalize-tail-bound}
+\theta\defeq\frac{\eps}{\lambda_{\min}}
+    <\frac{u_{\min}}{\lambda_{\max}}
+    \le\frac{u_{i,j}}{\lambda_i}\quad\forall i,j.
+\end{equation}
+
+We next find, for each good $j \in [m]$, a common slope that bounds changes in every buyer's normalized utility.
+For $j \in M^+$, the cutoff conditions make $p_j$ a suitable slope below the allotment.
+At $x_{i,j}=1$, however, such a bound must also account for the positive slope $\eps/\lambda_i$
+beyond the allotment. We therefore define auxiliary prices $q_j\defeq\max(p_j,\theta)$ for all $j \in [m]$.
+In particular, $q_j=\theta$ for $j \in [m] \setminus M^+$.
+These numbers are used only to compare utilities; affordability remains defined by $\AffR(n\pvec;\Icalhat)$.
+Crucially, we increase $p_j$ only for goods whose shared supply is fully allocated.
+Indeed, if $x_{i,j}<1$ for some buyer $i$, then $j \in M^+$, since every zero-price good is purchased fully.
+By \cref{eq:rivalize-cutoff}, $u_{i,j}/p_j \le \lambda_i$, so \cref{eq:rivalize-tail-bound} gives
+\[ p_j\ge\frac{u_{i,j}}{\lambda_i}\ge\frac{u_{\min}}{\lambda_{\max}}>\theta. \]
+Hence $q_j=p_j$ for every such good, or equivalently,
+\begin{equation}
+\label{eq:rivalize-full-supply}
+q_j>p_j \implies x_{i,j}=1\text{ for every }i
+    \implies \sum_i x_{i,j}=n.
+\end{equation}
+
+More precisely, the line of slope $q_j$ through the current point
+$(x_{i,j},f_{i,j}(x_{i,j})/\lambda_i)$ lies above the graph of $f_{i,j}/\lambda_i$:
+for every $i,j$ and $t \in [0,n]$,
+\begin{equation}
+\label{eq:rivalize-support}
+\frac{f_{i,j}(t)-f_{i,j}(x_{i,j})}{\lambda_i}
+    \le q_j(t-x_{i,j}).
+\end{equation}
+First consider $j \in M^+$.
+If $x_{i,j}=0$, then \cref{eq:rivalize-cutoff} gives $u_{i,j}/p_j \le \lambda_i$,
+so $u_{i,j}/\lambda_i\le p_j\le q_j$,
+and all slopes of $f_{i,j}/\lambda_i$ are at most $q_j$.
+If $0<x_{i,j}<1$, then \cref{eq:rivalize-cutoff} gives $u_{i,j}/p_j=\lambda_i$,
+and $q_j=p_j=u_{i,j}/\lambda_i$,
+so concavity gives the claimed inequality.
+Finally, if $x_{i,j}=1$, then \cref{eq:rivalize-cutoff} gives $u_{i,j}/p_j \ge \lambda_i$,
+so $p_j \le u_{i,j}/\lambda_i$. Together with \cref{eq:rivalize-tail-bound}, this yields
+\[ \frac{\eps}{\lambda_i}\le\theta\le q_j
+    \le\frac{u_{i,j}}{\lambda_i}, \]
+so $q_j$ lies between the two slopes at the breakpoint of $f_{i,j}/\lambda_i$,
+which again gives \cref{eq:rivalize-support}.
+
+Now consider $j \in [m] \setminus M^+$. Then $x_{i,j}=1$ and $q_j=\theta$.
+By \cref{eq:rivalize-tail-bound},
+\[ \frac{\eps}{\lambda_i}\le q_j=\theta<\frac{u_{i,j}}{\lambda_i}. \]
+Thus $q_j$ again lies between the two slopes at the breakpoint,
+and the same concavity argument proves \cref{eq:rivalize-support} for these goods.
+
+For any $\yvec \in \AffR(n\pvec;\Icalhat)$, apply \cref{eq:rivalize-support} with $t=ny_{i,j}$ and sum to obtain
+\begin{align*}
+\sum_i\frac{\uhat_i(\yvec_i)-\uhat_i(\xvec_i/n)}{\lambda_i}
+&\le\sum_{i,j}q_j(ny_{i,j}-x_{i,j})\\
+&=\sum_i\bigl((n\pvec)^T\yvec_i-\pvec^T\xvec_i\bigr)
+    +n\sum_j(q_j-p_j)\left(\sum_i y_{i,j}-1\right)\\
+&\le0.
+\end{align*}
+The equality uses \cref{eq:rivalize-full-supply}: whenever $q_j-p_j$ is positive,
+the original allocation has $\sum_i x_{i,j}=n$.
+The first term is non-positive because every buyer already spends $b$ at $\xvec$
+and cannot spend more in an allocation from $\AffR(n\pvec;\Icalhat)$.
+The second term is non-positive because $q_j-p_j\ge0$ and shared supply gives $\sum_i y_{i,j}\le1$.
+Thus the budget constraints control the contribution of the original prices,
+and the supply constraints control the contribution of the auxiliary price increases.
+Since every weight $1/\lambda_i$ is positive, no allocation in $\AffR(n\pvec;\Icalhat)$
+can Pareto dominate $\xvec/n$.
+Together with the case where the full bundle is affordable, this proves the forward implication.
+
+\paragraph{The reverse implication.}
+Suppose $\xvec \in [0,1]^{n\times m}$ and
+$\xvec/n \in \DemR(n\pvec;\Icalhat)\subseteq\AffR(n\pvec;\Icalhat)$.
+In particular, $\pvec^T\xvec_i\le b$ for every buyer $i$.
+If $\xvec\notin\DemNR(\pvec;\Ical)$, then some buyer $i$ has a bundle
+$\zvec_i \in [0,1]^m$ with $\pvec^T\zvec_i\le b$ and $u_i(\zvec_i)>u_i(\xvec_i)$.
+Define $\yvec_i\defeq\zvec_i/n$ and $\yvec_k\defeq\xvec_k/n$ for every $k\ne i$.
+All buyers remain within budget, and for each good $j$,
+\[ \sum_k y_{k,j}=\frac{z_{i,j}+\sum_{k\ne i}x_{k,j}}{n}\le1. \]
+Thus $\yvec \in \AffR(n\pvec;\Icalhat)$.
+Since $\uhat_i(\wvec/n)=u_i(\wvec)$ for every $\wvec \in [0,1]^m$, we have
+\[ \uhat_i(\yvec_i)=u_i(\zvec_i)>u_i(\xvec_i)=\uhat_i(\xvec_i/n). \]
+Every other buyer's utility is unchanged. Thus $\yvec$ Pareto dominates $\xvec/n$
+within $\AffR(n\pvec;\Icalhat)$, a contradiction.
+It follows that $\xvec \in \DemNR(\pvec;\Ical)$.
+\end{proof}
+
+\begin{theorem}
+\label{thm:rivalize-2}
+Let $\Ical \defeq ([n], [m], (u_i)_{i=1}^n, (b)_{i=1}^n)$ be a market
+where every buyer has budget $b > 0$ and linear utilities.
+Define $\Icalhat \defeq ([n], [m], (\uhat_i)_{i=1}^n, (b)_{i=1}^n)$ as in \cref{thm:rivalize-1}.
+Let $A$ be a non-rivalrous allocation rule, i.e.,
+$A(\pvec) \in \DemNR(\pvec; \Ical)$ for all $\pvec \in \mathbb{R}_{\ge 0}^m$.
+Let $\Ahat(\pvec) \defeq A(\pvec/n)/n$. Then
+\begin{enumerate}
+\item $\Ahat$ is a valid rivalrous allocation rule for $\Icalhat$,
+    i.e., $\Ahat(\pvec) \in \DemR(\pvec; \Icalhat)$ for all $\pvec \in \mathbb{R}_{\ge 0}^m$.
+% \item $R^{\Ahat}_j(\pvec) = R^A_j(\pvec/n)$ for all sellers $j \in [m]$ and prices $\pvec \in \mathbb{R}_{\ge 0}^m$.
+\item $\pvec$ is a Nash equilibrium for $(\Icalhat, \Ahat)$
+    iff $\pvec/n$ is a Nash equilibrium for $(\Ical, A)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Fix any $\pvec \in \mathbb{R}_{\ge0}^m$ and let $\xvec\defeq A(\pvec/n)$.
+Since $\xvec \in \DemNR(\pvec/n;\Ical)$, \cref{thm:rivalize-1} gives
+\[ \Ahat(\pvec)=\xvec/n \in \DemR(\pvec;\Icalhat). \]
+Thus $\Ahat$ is a valid rivalrous allocation rule.
+
+For every seller $j$,
+\[ R_j^{\Ahat}(\pvec)
+    =p_j\sum_i\frac{x_{i,j}}{n}
+    =R_j^A(\pvec/n). \]
+In particular, a unilateral deviation to price $s\ge0$ satisfies
+\[ R_j^{\Ahat}((s,\pvec_{-j})) = R_j^A((s/n,\pvec_{-j}/n)). \]
+As $s$ ranges over all non-negative prices, so does $s/n$.
+Therefore $\pvec$ is a Nash equilibrium under $\Ahat$ iff $\pvec/n$ is a Nash equilibrium under $A$,
+which is the claimed equivalence.
+\end{proof}
+
+

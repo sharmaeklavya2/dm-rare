@@ -1,0 +1,39 @@
+\begin{tikzpicture}[x=1cm,y=1cm,font=\fontsize{9}{10.8}\selectfont,
+  panel/.style={draw=black!35,fill=white,rounded corners=2pt,minimum width=4.45cm,minimum height=4.55cm},
+  move/.style={-{Stealth[length=2mm]},line width=.8pt,draw=black!65}]
+\path[use as bounding box] (-.15,-.4) rectangle (15.05,5.5);
+\node at (7.45,5.17) {$u_A=1.5x_1+x_2$, $u_B=x_1+1.5x_2$; both budgets are $1$};
+\foreach \xc/\heading/\prices/\rev in {2.25/{Starting prices}/{(.50,.50)}/{(1,1)},7.45/{Seller 1 increases}/{(.74,.50)}/{(1.24,.76)},12.65/{Seller 2 matches}/{(.74,.74)}/{(1,1)}} {
+  \node[panel] at (\xc,2.37) {};
+  \node[font=\fontsize{9}{10.8}\selectfont\bfseries] at (\xc,4.22) {\heading};
+  \node at (\xc,3.69) {$p=\prices$};
+  \node[align=center] at (\xc,.59) {Seller revenues\\$R=\rev$};
+}
+\draw[move] (4.48,2.4)--(5.2,2.4);
+\draw[move] (9.68,2.4)--(10.4,2.4);
+% Bars show expenditures, rather than quantities.
+\foreach \xc in {2.25,7.45,12.65} {
+  \node[anchor=west] at ({\xc-1.87},3.05) {Buyer A spends};
+  \node[anchor=west] at ({\xc-1.87},1.92) {Buyer B spends};
+}
+\foreach \xc/\aa/\bb in {2.25/.50/.50,7.45/.74/.50,12.65/.74/.26} {
+  \foreach \yy/\share in {2.5/\aa,1.37/\bb} {
+    \fill[blue!22] ({\xc-1.8},\yy-.22) rectangle ({\xc-1.8+3.6*\share},\yy+.22);
+    \fill[teal!30] ({\xc-1.8+3.6*\share},\yy-.22) rectangle ({\xc+1.8},\yy+.22);
+    \draw[black!60] ({\xc-1.8},\yy-.22) rectangle ({\xc+1.8},\yy+.22);
+    \draw[black!60] ({\xc-1.8+3.6*\share},\yy-.22)--({\xc-1.8+3.6*\share},\yy+.22);
+  }
+}
+\node at ({2.25-0.9},2.5) {$.50$}; \node at ({2.25+0.9},2.5) {$.50$};
+\node at ({2.25-0.9},1.37) {$.50$}; \node at ({2.25+0.9},1.37) {$.50$};
+\node at ({7.45-0.45},2.5) {$.74$}; \node at ({7.45+1.35},2.5) {$.26$};
+\node at ({7.45-0.9},1.37) {$.50$}; \node at ({7.45+0.9},1.37) {$.50$};
+\node at ({12.65-0.45},2.5) {$.74$}; \node at ({12.65+1.35},2.5) {$.26$};
+\node at ({12.65-1.35},1.37) {$.26$}; \node at ({12.65+0.45},1.37) {$.74$};
+%
+\node[draw=blue!55!black,fill=blue!22,minimum width=.23cm,minimum height=.16cm,inner sep=0] at (4.35,-.12) {};
+\node[anchor=west] at (4.58,-.12) {Seller 1};
+\node[draw=teal!65!black,fill=teal!30,minimum width=.23cm,minimum height=.16cm,inner sep=0] at (7.01,-.12) {};
+\node[anchor=west] at (7.24,-.12) {Seller 2};
+\node[anchor=west] at (10.02,-.12) {IR: $1\ge .76$};
+\end{tikzpicture}
